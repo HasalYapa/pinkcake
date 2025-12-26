@@ -15,7 +15,7 @@ export default function AdminLoginPage({
         <div className="text-center">
           <Link href="/" className="flex items-center justify-center gap-2 mb-4">
               <CakeIcon className="h-8 w-8 text-primary" />
-              <span className="font-headline font-bold text-2xl">CakesLK Admin</span>
+              <span className="font-headline font-bold text-2xl">pinkcakeboutique Admin</span>
           </Link>
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome Back

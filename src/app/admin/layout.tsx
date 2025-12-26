@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'CakesLK Admin',
-  description: 'Manage orders for CakesLK',
+  title: 'pinkcakeboutique Admin',
+  description: 'Manage orders for pinkcakeboutique',
 }
 
 export default function AdminLayout({

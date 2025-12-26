@@ -17,7 +17,7 @@ export function Footer() {
             <div className="flex flex-col md:flex-row justify-between items-center max-w-[1200px] mx-auto gap-6">
                 <div className="flex items-center gap-3">
                     <CakeIcon className="h-6 w-6 text-primary" />
-                    <span className="text-foreground dark:text-white font-bold text-lg">CakesLK</span>
+                    <span className="text-foreground dark:text-white font-bold text-lg">pinkcakeboutique</span>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6">
                     <Link className="text-sm text-muted-foreground dark:text-text-dark hover:text-primary transition-colors" href="#">Privacy Policy</Link>
@@ -36,7 +36,7 @@ export function Footer() {
                 </div>
             </div>
             <div className="mt-8 text-center text-xs text-muted-foreground dark:text-text-dark/50">
-                 © {new Date().getFullYear()} CakesLK. All Rights Reserved.
+                 © {new Date().getFullYear()} pinkcakeboutique. All Rights Reserved.
              </div>
         </footer>
     );

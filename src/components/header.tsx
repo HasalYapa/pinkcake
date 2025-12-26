@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
-import { Menu, ShoppingCart } from "lucide-react"
+import { Menu, ShoppingCart, User } from "lucide-react"
 import { CakeIcon } from "./icons"
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
@@ -18,7 +18,7 @@ export function Header() {
             <div className="flex items-center gap-4 text-foreground dark:text-white">
                 <Link href="/" className="flex items-center gap-2">
                     <CakeIcon className="h-8 w-8 text-primary" />
-                    <h2 className="text-foreground dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">CakesLK</h2>
+                    <h2 className="text-foreground dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">pinkcakeboutique</h2>
                 </Link>
             </div>
             
@@ -35,7 +35,7 @@ export function Header() {
                         <Link href="/admin">Log In</Link>
                     </Button>
                     <Button variant="outline" size="icon" className="bg-background dark:bg-muted">
-                        <ShoppingCart className="h-5 w-5" />
+                        <User className="h-5 w-5" />
                     </Button>
                 </div>
             </div>
@@ -52,7 +52,7 @@ export function Header() {
                         <nav className="grid gap-6 text-lg font-medium p-6">
                             <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
                                 <CakeIcon className="h-7 w-7 text-primary" />
-                                <span className="font-bold text-xl">CakesLK</span>
+                                <span className="font-bold text-xl">pinkcakeboutique</span>
                             </Link>
                             <NavLink href="/">Home</NavLink>
                             <NavLink href="/menu">Menu</NavLink>

@@ -22,7 +22,7 @@ export default function OrderSuccessPage() {
     }
 
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    const message = `Hello CakesLK! I've just placed an order. My Order ID is ${orderId}. Please confirm my order. Thank you!`;
+    const message = `Hello pinkcakeboutique! I've just placed an order. My Order ID is ${orderId}. Please confirm my order. Thank you!`;
     const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     return (

@@ -5,7 +5,7 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
-  title: 'CakesLK - Delicious Homemade Cakes in Sri Lanka',
+  title: 'pinkcakeboutique - Delicious Homemade Cakes in Sri Lanka',
   description: 'Order beautiful and delicious custom cakes for any occasion. Birthday, wedding, and bento cakes made with love.',
 };
 
