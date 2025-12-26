@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { CakeOrder, OrderStatus, PaymentStatus } from '@/lib/types';
 import {
   Table,
@@ -27,8 +27,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Trash2 } from 'lucide-react';
-import { format, formatDistanceToNow } from 'date-fns';
-import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
 import { ORDER_STATUSES, PAYMENT_STATUSES } from '@/lib/constants';
 import { deleteOrder, updateOrderStatus, updatePaymentStatus } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -43,17 +42,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Timestamp } from 'firebase/firestore';
 
 interface DashboardClientProps {
   initialOrders: CakeOrder[];
 }
 
 export function DashboardClient({ initialOrders }: DashboardClientProps) {
-  const [orders, setOrders] = useState<CakeOrder[]>(initialOrders);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const handleOrderStatusChange = (orderId: number, newStatus: OrderStatus) => {
+  const handleOrderStatusChange = (orderId: string, newStatus: OrderStatus) => {
     startTransition(async () => {
         const result = await updateOrderStatus(orderId, newStatus);
         if (result.success) {
@@ -64,7 +63,7 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
     });
   };
 
-  const handlePaymentStatusChange = (orderId: number, newStatus: PaymentStatus) => {
+  const handlePaymentStatusChange = (orderId: string, newStatus: PaymentStatus) => {
     startTransition(async () => {
         const result = await updatePaymentStatus(orderId, newStatus);
         if (result.success) {
@@ -75,7 +74,7 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
     });
   };
   
-  const handleDeleteOrder = (orderId: number) => {
+  const handleDeleteOrder = (orderId: string) => {
     startTransition(async () => {
         const result = await deleteOrder(orderId);
         if (result.success) {
@@ -86,16 +85,16 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
     });
   }
 
-  const getStatusBadgeVariant = (status: OrderStatus) => {
-    switch (status) {
-        case 'Pending': return 'default';
-        case 'Accepted': return 'secondary';
-        case 'Baking': return 'secondary';
-        case 'Ready': return 'secondary';
-        case 'Delivered': return 'outline';
-        default: return 'default';
+  const formatDate = (dateValue: string | Timestamp) => {
+    if (typeof dateValue === 'string') {
+        return format(new Date(dateValue), "dd MMM yyyy");
     }
+    if (dateValue instanceof Timestamp) {
+        return format(dateValue.toDate(), "dd MMM yyyy");
+    }
+    return 'Invalid Date';
   }
+
 
   return (
     <div className="border shadow-sm rounded-lg">
@@ -115,7 +114,7 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
         </TableHeader>
         <TableBody>
           {initialOrders.map((order) => (
-            <TableRow key={order.order_id}>
+            <TableRow key={order.id}>
               <TableCell>
                 <div className="font-medium">{order.customer_name}</div>
                 <div className="text-sm text-muted-foreground">{order.phone_number}</div>
@@ -125,13 +124,13 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
                 <div className="text-sm text-muted-foreground">{order.flavor} ({order.cake_size})</div>
               </TableCell>
               <TableCell>
-                {format(new Date(order.delivery_date), "dd MMM yyyy")}
+                {formatDate(order.delivery_date)}
               </TableCell>
               <TableCell>LKR {order.total_price.toLocaleString()}</TableCell>
               <TableCell>
                  <Select 
                     defaultValue={order.order_status} 
-                    onValueChange={(value) => handleOrderStatusChange(order.order_id, value as OrderStatus)}
+                    onValueChange={(value) => handleOrderStatusChange(order.id, value as OrderStatus)}
                     disabled={isPending}
                  >
                     <SelectTrigger className="w-[120px] h-8 text-xs">
@@ -147,7 +146,7 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
               <TableCell>
                 <Select 
                     defaultValue={order.payment_status} 
-                    onValueChange={(value) => handlePaymentStatusChange(order.order_id, value as PaymentStatus)}
+                    onValueChange={(value) => handlePaymentStatusChange(order.id, value as PaymentStatus)}
                     disabled={isPending}
                 >
                     <SelectTrigger className="w-[110px] h-8 text-xs">
@@ -184,12 +183,12 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
                             This action cannot be undone. This will permanently delete the order
-                            for <span className='font-semibold'>{order.customer_name}</span> (ID: {order.order_id}).
+                            for <span className='font-semibold'>{order.customer_name}</span> (ID: {order.id}).
                         </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDeleteOrder(order.order_id)} className="bg-destructive hover:bg-destructive/90">
+                        <AlertDialogAction onClick={() => handleDeleteOrder(order.id)} className="bg-destructive hover:bg-destructive/90">
                             Yes, delete order
                         </AlertDialogAction>
                         </AlertDialogFooter>

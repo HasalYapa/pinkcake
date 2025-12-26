@@ -1,4 +1,7 @@
-import { createServiceRoleClient } from "@/lib/supabase/server";
+'use client';
+import { useState, useEffect } from 'react';
+import { collection, onSnapshot, query, orderBy, Timestamp } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
 import { DashboardClient } from "@/components/admin/dashboard-client";
 import { CakeOrder } from "@/lib/types";
 import {
@@ -10,33 +13,59 @@ import {
 import { DollarSign, Package } from "lucide-react";
 import { startOfMonth, startOfToday } from "date-fns";
 
-async function getDashboardData() {
-    const supabase = createServiceRoleClient();
-    
-    const { data: orders, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+export default function DashboardPage() {
+    const firestore = useFirestore();
+    const [orders, setOrders] = useState<CakeOrder[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    if (error) {
-        console.error("Error fetching dashboard data:", error);
-        return { orders: [], todayCount: 0, monthCount: 0, totalRevenue: 0 };
+    const [todayCount, setTodayCount] = useState(0);
+    const [monthCount, setMonthCount] = useState(0);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+
+    useEffect(() => {
+        const q = query(collection(firestore, "orders"), orderBy("created_at", "desc"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const ordersData: CakeOrder[] = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                ordersData.push({ 
+                    ...data,
+                    id: doc.id,
+                    created_at: (data.created_at as Timestamp).toDate().toISOString(),
+                    delivery_date: data.delivery_date,
+                 } as CakeOrder);
+            });
+            setOrders(ordersData);
+
+            const todayStart = startOfToday();
+            const monthStart = startOfMonth(new Date());
+
+            const newTodayCount = ordersData.filter(o => new Date(o.created_at as string) >= todayStart).length;
+            const newMonthCount = ordersData.filter(o => new Date(o.created_at as string) >= monthStart).length;
+            const newTotalRevenue = ordersData.filter(o => o.payment_status === 'Paid').reduce((acc, o) => acc + o.total_price, 0);
+
+            setTodayCount(newTodayCount);
+            setMonthCount(newMonthCount);
+            setTotalRevenue(newTotalRevenue);
+            
+            setLoading(false);
+        }, (err) => {
+            console.error("Error fetching dashboard data:", err);
+            setError("Failed to fetch orders.");
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [firestore]);
+
+    if (loading) {
+        return <div>Loading dashboard...</div>
     }
 
-    const todayStart = startOfToday().toISOString();
-    const monthStart = startOfMonth(new Date()).toISOString();
-
-    const todayCount = orders.filter(o => o.created_at >= todayStart).length;
-    const monthCount = orders.filter(o => o.created_at >= monthStart).length;
-    const totalRevenue = orders.filter(o => o.payment_status === 'Paid').reduce((acc, o) => acc + o.total_price, 0);
-
-    return {
-        orders: orders as CakeOrder[],
-        todayCount,
-        monthCount,
-        totalRevenue
-    };
-}
-
-export default async function DashboardPage() {
-    const { orders, todayCount, monthCount, totalRevenue } = await getDashboardData();
+    if (error) {
+        return <div className="text-destructive">{error}</div>
+    }
     
     return (
         <>

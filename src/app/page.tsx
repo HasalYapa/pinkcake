@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { placeholderImages } from '@/lib/placeholder-images';
 import { ArrowRight, Cake, Gift, Heart, PartyPopper } from 'lucide-react';
 
 const categories = [
@@ -13,7 +13,7 @@ const categories = [
 ];
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-cake');
+  const heroImage = placeholderImages.find(p => p.id === 'hero-cake');
 
   return (
     <div className="flex flex-col">
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {categories.map((category) => {
-              const categoryImage = PlaceHolderImages.find(p => p.id === category.imageId);
+              const categoryImage = placeholderImages.find(p => p.id === category.imageId);
               return (
                 <Link href={`/order?category=${encodeURIComponent(category.name)}`} key={category.name}>
                   <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-2 border-transparent hover:border-primary">

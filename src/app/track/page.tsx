@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-async function OrderDetails({ orderId }: { orderId: number }) {
+async function OrderDetails({ orderId }: { orderId: string }) {
     const order = await getOrderById(orderId);
 
     if (!order) {
@@ -28,7 +28,7 @@ async function OrderDetails({ orderId }: { orderId: number }) {
     return (
         <Card className="mt-8 w-full max-w-4xl mx-auto shadow-lg">
             <CardHeader>
-                <CardTitle>Order Status for ID: {order.order_id}</CardTitle>
+                <CardTitle>Order Status for ID: {order.id}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <OrderStatusVisualizer currentStatus={order.order_status} />
@@ -55,7 +55,7 @@ async function OrderDetails({ orderId }: { orderId: number }) {
 
 
 export default function TrackPage({ searchParams }: { searchParams: { id?: string } }) {
-    const orderId = searchParams.id ? parseInt(searchParams.id, 10) : undefined;
+    const orderId = searchParams.id;
     
     return (
         <div className="container mx-auto px-4 py-8 md:py-16">

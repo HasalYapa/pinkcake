@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { useRouter, useSearchParams } from "next/navigation"
 
 const FormSchema = z.object({
-  orderId: z.string().regex(/^\d+$/, "Order ID must be a number."),
+  orderId: z.string().min(1, "Order ID is required."),
 })
 
 export function TrackOrderForm() {

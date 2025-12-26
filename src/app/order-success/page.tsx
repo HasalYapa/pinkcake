@@ -35,7 +35,7 @@ export default function OrderSuccessPage() {
                 </p>
                 <div className="mt-8 bg-background/70 p-4 rounded-md border border-dashed">
                     <p className="text-sm text-muted-foreground">Your Unique Order ID is:</p>
-                    <p className="text-3xl font-bold font-mono tracking-widest text-primary">{orderId}</p>
+                    <p className="text-2xl md:text-3xl font-bold font-mono tracking-widest text-primary break-all px-2">{orderId}</p>
                 </div>
                 <p className="mt-6 text-muted-foreground">
                     Please keep this ID safe. You can use it to track your order.

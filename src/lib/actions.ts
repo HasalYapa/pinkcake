@@ -1,11 +1,28 @@
 'use server';
 
 import { z } from 'zod';
-import { createServerClient } from './supabase/server';
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CakeOrder, OrderStatus, PaymentStatus } from './types';
+import { 
+    addDoc, 
+    collection, 
+    getDocs, 
+    getFirestore, 
+    query, 
+    where, 
+    Timestamp,
+    doc,
+    updateDoc,
+    deleteDoc,
+    getDoc,
+} from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+const { firestore, auth } = initializeFirebase();
+const storage = getStorage();
 
 const orderSchema = z.object({
   customer_name: z.string().min(2, { message: "Name is required." }),
@@ -22,12 +39,7 @@ const orderSchema = z.object({
 // Mock AI function
 async function getAiSuggestionFromFlow(prompt: string): Promise<string> {
     console.log(`Getting AI suggestion for: ${prompt}`);
-    // In a real scenario, this would call the Genkit flow
-    // For now, returning a mock response
     try {
-        // const { suggestCake } = await import('@/ai/flows/suggestCake');
-        // const response = await suggestCake.run({ prompt });
-        // return response;
         await new Promise(resolve => setTimeout(resolve, 1000));
         return `Based on "${prompt}", a Chocolate Fudge cake with a 'Happy Birthday' message would be a great choice! It's a classic crowd-pleaser.`;
     } catch (error) {
@@ -53,9 +65,6 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
 
 
 export async function createOrder(formData: FormData) {
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
-
   const validatedFields = orderSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!validatedFields.success) {
@@ -64,87 +73,78 @@ export async function createOrder(formData: FormData) {
     };
   }
   
-  const { data: orderData, ...rest } = validatedFields.data;
+  const { ...orderData } = validatedFields.data;
 
   let imageUrl: string | null = null;
   const imageFile = formData.get('reference_image') as File;
 
   if (imageFile && imageFile.size > 0) {
     const fileName = `${Date.now()}-${imageFile.name}`;
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('cake-references')
-      .upload(fileName, imageFile);
-
-    if (uploadError) {
-      console.error('Storage Error:', uploadError);
-      return {
-        errors: { _form: ['Failed to upload reference image.'] },
-      };
+    const storageRef = ref(storage, `cake-references/${fileName}`);
+    
+    try {
+        const snapshot = await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
+    } catch (uploadError) {
+        console.error('Storage Error:', uploadError);
+        return {
+            errors: { _form: ['Failed to upload reference image.'] },
+        };
     }
-    
-    const { data: publicUrlData } = supabase.storage
-        .from('cake-references')
-        .getPublicUrl(uploadData.path);
-    
-    imageUrl = publicUrlData.publicUrl;
   }
 
-  const newOrder: Omit<CakeOrder, 'id' | 'created_at' | 'order_id'> = {
-    ...rest,
-    ...validatedFields.data,
+  const newOrder: Omit<CakeOrder, 'id' | 'order_id'> = {
+    ...orderData,
     image_url: imageUrl,
     order_status: 'Pending',
     payment_status: 'Pending',
+    created_at: Timestamp.now(),
   };
 
-  const { data: insertedOrder, error } = await supabase
-    .from('orders')
-    .insert(newOrder)
-    .select('order_id')
-    .single();
-
-  if (error) {
+  try {
+    const docRef = await addDoc(collection(firestore, "orders"), newOrder);
+    revalidatePath('/');
+    redirect(`/order-success?id=${docRef.id}`);
+  } catch (error) {
     console.error('Database Error:', error);
     return {
       errors: { _form: ['Database error: Failed to create order.'] },
     };
   }
-
-  revalidatePath('/');
-  redirect(`/order-success?id=${insertedOrder.order_id}`);
 }
 
-export async function getOrderById(orderId: number) {
-  if (isNaN(orderId)) return null;
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
+export async function getOrderById(orderId: string) {
+  if (!orderId) return null;
+  
+  try {
+    const docRef = doc(firestore, 'orders', orderId);
+    const docSnap = await getDoc(docRef);
 
-  const { data, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('order_id', orderId)
-    .single();
-
-  if (error) {
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        return {
+            id: docSnap.id,
+            ...data,
+            created_at: data.created_at.toDate().toISOString(),
+            delivery_date: data.delivery_date.toDate ? data.delivery_date.toDate().toISOString() : data.delivery_date,
+        } as CakeOrder;
+    } else {
+        return null;
+    }
+  } catch (error) {
     console.error('Error fetching order:', error);
     return null;
   }
-  return data as CakeOrder;
 }
 
 // Admin Actions
 export async function signIn(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
     return redirect('/admin?message=Could not authenticate user');
   }
 
@@ -152,62 +152,41 @@ export async function signIn(formData: FormData) {
 }
 
 export async function signOut() {
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
-  await supabase.auth.signOut();
+  await auth.signOut();
   return redirect('/admin');
 }
 
-export async function updateOrderStatus(orderId: number, status: OrderStatus) {
-    const cookieStore = cookies();
-    const supabase = createServerClient(cookieStore);
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ order_status: status })
-        .eq('order_id', orderId);
-
-    if (error) {
+export async function updateOrderStatus(orderId: string, status: OrderStatus) {
+    try {
+        const orderRef = doc(firestore, "orders", orderId);
+        await updateDoc(orderRef, { order_status: status });
+        revalidatePath('/admin/dashboard');
+        return { success: true, message: 'Order status updated.' };
+    } catch (error) {
         console.error("Failed to update order status", error);
         return { success: false, message: 'Failed to update order status.' };
     }
-
-    revalidatePath('/admin/dashboard');
-    return { success: true, message: 'Order status updated.' };
 }
 
-export async function updatePaymentStatus(orderId: number, status: PaymentStatus) {
-    const cookieStore = cookies();
-    const supabase = createServerClient(cookieStore);
-
-    const { error } = await supabase
-        .from('orders')
-        .update({ payment_status: status })
-        .eq('order_id', orderId);
-
-    if (error) {
+export async function updatePaymentStatus(orderId: string, status: PaymentStatus) {
+    try {
+        const orderRef = doc(firestore, "orders", orderId);
+        await updateDoc(orderRef, { payment_status: status });
+        revalidatePath('/admin/dashboard');
+        return { success: true, message: 'Payment status updated.' };
+    } catch(error) {
         console.error("Failed to update payment status", error);
         return { success: false, message: 'Failed to update payment status.' };
     }
-
-    revalidatePath('/admin/dashboard');
-    return { success: true, message: 'Payment status updated.' };
 }
 
-export async function deleteOrder(orderId: number) {
-    const cookieStore = cookies();
-    const supabase = createServerClient(cookieStore);
-
-    const { error } = await supabase
-        .from('orders')
-        .delete()
-        .eq('order_id', orderId);
-
-    if (error) {
+export async function deleteOrder(orderId: string) {
+    try {
+        await deleteDoc(doc(firestore, "orders", orderId));
+        revalidatePath('/admin/dashboard');
+        return { success: true, message: 'Order deleted.' };
+    } catch (error) {
         console.error("Failed to delete order", error);
         return { success: false, message: 'Failed to delete order.' };
     }
-
-    revalidatePath('/admin/dashboard');
-    return { success: true, message: 'Order deleted.' };
 }

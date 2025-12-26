@@ -1,45 +1,31 @@
+'use client';
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import {
-  Bell,
   Home,
   LogOut,
-  Package,
-  Package2,
-  Users,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { createServerClient } from '@/lib/supabase/server'
 import { signOut } from '@/lib/actions'
 import { CakeIcon } from '@/components/icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { PlaceHolderImages } from '@/lib/placeholder-images'
+import { useUser } from '@/firebase';
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const cookieStore = cookies()
-  const supabase = createServerClient(cookieStore)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user, isUserLoading } = useUser();
 
-  if (!user) {
-    redirect('/admin')
+  if (isUserLoading) {
+    return <div>Loading...</div>;
   }
 
-  const avatarImg = PlaceHolderImages.find(p => p.id === 'avatar-female');
+  if (!user) {
+    redirect('/admin');
+  }
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -65,7 +51,7 @@ export default async function DashboardLayout({
           <div className="mt-auto p-4">
              <div className="flex items-center gap-4">
                 <Avatar className="h-9 w-9">
-                    {avatarImg && <AvatarImage src={avatarImg.imageUrl} alt="Admin Avatar" data-ai-hint={avatarImg.imageHint} />}
+                    <AvatarImage src="https://picsum.photos/seed/1/40/40" alt="Admin Avatar" data-ai-hint="woman avatar" />
                     <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="grid gap-0.5">
@@ -83,9 +69,7 @@ export default async function DashboardLayout({
       </div>
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
-           {/* Mobile Nav could be added here if needed */}
            <div className='w-full flex-1'>
-            {/* Can add search bar here */}
            </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
