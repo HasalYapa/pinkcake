@@ -1,7 +1,7 @@
 export const CAKE_CATEGORIES = [
   "Birthday Cakes",
   "Wedding Cakes",
-  "Cupcakes",
+  "Bento Cakes",
   "Custom Cakes",
 ];
 
