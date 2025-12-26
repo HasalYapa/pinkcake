@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Facebook, Heart, MessageSquare, Cake } from 'lucide-react';
+import { Instagram, Facebook, Heart, MessageSquare } from 'lucide-react';
 
 function SocialLink({ href, children }: { href: string; children: React.ReactNode }) {
     return (
@@ -66,7 +66,7 @@ export function Footer() {
                         © {new Date().getFullYear()} pinkcakeboutique. All rights reserved.
                     </p>
                     <p className="text-sm text-muted-foreground dark:text-text-dark/60 font-medium flex items-center gap-1">
-                        Made with <Heart className="text-base text-primary h-4 w-4 fill-current" /> in Colombo
+                        Made with pinkcakeboutique
                     </p>
                 </div>
             </div>
