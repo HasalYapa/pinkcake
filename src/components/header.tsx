@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
 import { Menu, User } from "lucide-react"
 
@@ -47,6 +47,9 @@ export function Header() {
                          </Button>
                     </SheetTrigger>
                     <SheetContent side="left">
+                        <SheetHeader className="sr-only">
+                          <SheetTitle>Mobile Menu</SheetTitle>
+                        </SheetHeader>
                         <nav className="grid gap-6 text-lg font-medium p-6">
                             <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
                                 <span className="font-bold text-xl">pinkcakeboutique</span>
