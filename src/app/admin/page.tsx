@@ -34,7 +34,7 @@ export default function AdminLoginPage({
             <Terminal className="h-4 w-4" />
             <AlertTitle>Admin Account</AlertTitle>
             <AlertDescription>
-                Please use the Firebase console to create an admin user with an email and password. The placeholder email is <code className="font-mono bg-muted px-1 rounded-sm">admin@cakes.lk</code>.
+                Please use the Supabase dashboard to create an admin user with an email and password. The placeholder email is <code className="font-mono bg-muted px-1 rounded-sm">admin@cakes.lk</code>.
             </AlertDescription>
         </Alert>
       </div>

@@ -3,7 +3,6 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { FirebaseClientProvider } from '@/firebase/client-provider'
 
 export const metadata: Metadata = {
   title: 'CakesLK - Delicious Homemade Cakes in Sri Lanka',
@@ -23,14 +22,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,701&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
-        <FirebaseClientProvider>
           <Header />
           <main className="flex-grow">
             {children}
           </main>
           <Footer />
           <Toaster />
-        </FirebaseClientProvider>
       </body>
     </html>
   );

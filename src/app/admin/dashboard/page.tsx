@@ -1,7 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { collection, onSnapshot, query, orderBy, Timestamp } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useState, useEffect, use } from 'react';
 import { DashboardClient } from "@/components/admin/dashboard-client";
 import { CakeOrder } from "@/lib/types";
 import {
@@ -12,9 +10,10 @@ import {
 } from "@/components/ui/card"
 import { DollarSign, Package } from "lucide-react";
 import { startOfMonth, startOfToday } from "date-fns";
+import { createClient } from '@/lib/supabase/client';
 
 export default function DashboardPage() {
-    const firestore = useFirestore();
+    const supabase = createClient();
     const [orders, setOrders] = useState<CakeOrder[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -24,40 +23,58 @@ export default function DashboardPage() {
     const [totalRevenue, setTotalRevenue] = useState(0);
 
     useEffect(() => {
-        const q = query(collection(firestore, "orders"), orderBy("created_at", "desc"));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const ordersData: CakeOrder[] = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                ordersData.push({ 
-                    ...data,
-                    id: doc.id,
-                    created_at: (data.created_at as Timestamp).toDate().toISOString(),
-                    delivery_date: data.delivery_date,
-                 } as CakeOrder);
-            });
-            setOrders(ordersData);
+        const fetchOrders = async () => {
+            const { data: ordersData, error: err } = await supabase
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-            const todayStart = startOfToday();
-            const monthStart = startOfMonth(new Date());
+            if (err) {
+                console.error("Error fetching dashboard data:", err);
+                setError("Failed to fetch orders.");
+                setLoading(false);
+                return;
+            }
 
-            const newTodayCount = ordersData.filter(o => new Date(o.created_at as string) >= todayStart).length;
-            const newMonthCount = ordersData.filter(o => new Date(o.created_at as string) >= monthStart).length;
-            const newTotalRevenue = ordersData.filter(o => o.payment_status === 'Paid').reduce((acc, o) => acc + o.total_price, 0);
+            if (ordersData) {
+                const formattedOrders = ordersData.map((o: any) => ({
+                    ...o,
+                    id: o.id.toString(), // Ensure id is a string
+                })) as CakeOrder[];
 
-            setTodayCount(newTodayCount);
-            setMonthCount(newMonthCount);
-            setTotalRevenue(newTotalRevenue);
-            
+                setOrders(formattedOrders);
+
+                const todayStart = startOfToday();
+                const monthStart = startOfMonth(new Date());
+
+                const newTodayCount = formattedOrders.filter(o => new Date(o.created_at as string) >= todayStart).length;
+                const newMonthCount = formattedOrders.filter(o => new Date(o.created_at as string) >= monthStart).length;
+                const newTotalRevenue = formattedOrders.filter(o => o.payment_status === 'Paid').reduce((acc, o) => acc + o.total_price, 0);
+
+                setTodayCount(newTodayCount);
+                setMonthCount(newMonthCount);
+                setTotalRevenue(newTotalRevenue);
+            }
             setLoading(false);
-        }, (err) => {
-            console.error("Error fetching dashboard data:", err);
-            setError("Failed to fetch orders.");
-            setLoading(false);
-        });
+        };
+        
+        fetchOrders();
 
-        return () => unsubscribe();
-    }, [firestore]);
+        const channel = supabase.channel('realtime-orders')
+            .on('postgres_changes', {
+                event: '*',
+                schema: 'public',
+                table: 'orders'
+            }, (payload) => {
+                console.log('Change received!', payload)
+                fetchOrders();
+            })
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [supabase]);
 
     if (loading) {
         return <div>Loading dashboard...</div>

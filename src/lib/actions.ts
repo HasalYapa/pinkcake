@@ -4,22 +4,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CakeOrder, OrderStatus, PaymentStatus } from './types';
-import { 
-    addDoc, 
-    collection, 
-    getDocs, 
-    getFirestore, 
-    query, 
-    where, 
-    Timestamp,
-    doc,
-    updateDoc,
-    deleteDoc,
-    getDoc,
-} from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase/server';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createClient } from '@/lib/supabase/server';
 
 const orderSchema = z.object({
   customer_name: z.string().min(2, { message: "Name is required." }),
@@ -62,7 +47,8 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
 
 
 export async function createOrder(formData: FormData) {
-  const { firestore, storage } = initializeFirebase();
+  const supabase = createClient();
+
   const validatedFields = orderSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!validatedFields.success) {
@@ -72,124 +58,136 @@ export async function createOrder(formData: FormData) {
   }
   
   const { ...orderData } = validatedFields.data;
-
+  
   let imageUrl: string | null = null;
   const imageFile = formData.get('reference_image') as File;
 
   if (imageFile && imageFile.size > 0) {
     const fileName = `${Date.now()}-${imageFile.name}`;
-    const storageRef = ref(storage, `cake-references/${fileName}`);
-    
-    try {
-        const snapshot = await uploadBytes(storageRef, imageFile);
-        imageUrl = await getDownloadURL(snapshot.ref);
-    } catch (uploadError) {
+    const { data: uploadData, error: uploadError } = await supabase
+        .storage
+        .from('cake-references')
+        .upload(fileName, imageFile);
+
+    if (uploadError) {
         console.error('Storage Error:', uploadError);
         return {
             errors: { _form: ['Failed to upload reference image.'] },
         };
     }
+    
+    const { data: urlData } = supabase.storage.from('cake-references').getPublicUrl(uploadData.path);
+    imageUrl = urlData.publicUrl;
   }
 
-  const newOrder: Omit<CakeOrder, 'id' | 'order_id'> = {
+  const newOrder: Omit<CakeOrder, 'id' | 'created_at'> = {
     ...orderData,
     image_url: imageUrl,
     order_status: 'Pending',
     payment_status: 'Pending',
-    created_at: Timestamp.now(),
   };
 
-  try {
-    const docRef = await addDoc(collection(firestore, "orders"), newOrder);
-    revalidatePath('/');
-    redirect(`/order-success?id=${docRef.id}`);
-  } catch (error) {
+  const { data: insertedOrder, error } = await supabase
+    .from('orders')
+    .insert([newOrder])
+    .select()
+    .single();
+
+  if (error) {
     console.error('Database Error:', error);
     return {
       errors: { _form: ['Database error: Failed to create order.'] },
     };
   }
+
+  revalidatePath('/');
+  if (insertedOrder) {
+    redirect(`/order-success?id=${insertedOrder.id}`);
+  }
 }
 
-export async function getOrderById(orderId: string) {
-  if (!orderId) return null;
-  const { firestore } = initializeFirebase();
+export async function getOrderById(orderId: string): Promise<{order: CakeOrder | null, error: string | null}> {
+  if (!orderId) return { order: null, error: "Order ID is required." };
+  const supabase = createClient();
   try {
-    const docRef = doc(firestore, 'orders', orderId);
-    const docSnap = await getDoc(docRef);
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
 
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        return {
-            id: docSnap.id,
-            ...data,
-            created_at: data.created_at.toDate().toISOString(),
-            delivery_date: data.delivery_date.toDate ? data.delivery_date.toDate().toISOString() : data.delivery_date,
-        } as CakeOrder;
-    } else {
-        return null;
-    }
-  } catch (error) {
+    if (error) throw error;
+
+    return { order: data as CakeOrder, error: null };
+  } catch (error: any) {
     console.error('Error fetching order:', error);
-    return null;
+    return { order: null, error: error.message };
   }
 }
 
 // Admin Actions
 export async function signIn(formData: FormData) {
-  const { auth } = initializeFirebase();
+  const supabase = createClient();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    return redirect('/admin?message=Could not authenticate user');
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return redirect(`/admin?message=${error.message}`);
   }
 
+  revalidatePath('/admin/dashboard');
   return redirect('/admin/dashboard');
 }
 
 export async function signOut() {
-  const { auth } = initializeFirebase();
-  await auth.signOut();
+  const supabase = createClient();
+  await supabase.auth.signOut();
   return redirect('/admin');
 }
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
-    const { firestore } = initializeFirebase();
-    try {
-        const orderRef = doc(firestore, "orders", orderId);
-        await updateDoc(orderRef, { order_status: status });
-        revalidatePath('/admin/dashboard');
-        return { success: true, message: 'Order status updated.' };
-    } catch (error) {
-        console.error("Failed to update order status", error);
-        return { success: false, message: 'Failed to update order status.' };
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('orders')
+      .update({ order_status: status })
+      .eq('id', orderId);
+
+    if (error) {
+      console.error("Failed to update order status", error);
     }
+    revalidatePath('/admin/dashboard');
+    return { error: error?.message };
 }
 
 export async function updatePaymentStatus(orderId: string, status: PaymentStatus) {
-    const { firestore } = initializeFirebase();
-    try {
-        const orderRef = doc(firestore, "orders", orderId);
-        await updateDoc(orderRef, { payment_status: status });
-        revalidatePath('/admin/dashboard');
-        return { success: true, message: 'Payment status updated.' };
-    } catch(error) {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('orders')
+      .update({ payment_status: status })
+      .eq('id', orderId);
+    
+    if (error) {
         console.error("Failed to update payment status", error);
-        return { success: false, message: 'Failed to update payment status.' };
     }
+    revalidatePath('/admin/dashboard');
+    return { error: error?.message };
 }
 
 export async function deleteOrder(orderId: string) {
-    const { firestore } = initializeFirebase();
-    try {
-        await deleteDoc(doc(firestore, "orders", orderId));
-        revalidatePath('/admin/dashboard');
-        return { success: true, message: 'Order deleted.' };
-    } catch (error) {
+    const supabase = createClient();
+    const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId);
+    
+    if (error) {
         console.error("Failed to delete order", error);
-        return { success: false, message: 'Failed to delete order.' };
     }
+    revalidatePath('/admin/dashboard');
+    return { error: error?.message };
 }

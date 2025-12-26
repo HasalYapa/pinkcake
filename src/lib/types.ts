@@ -1,13 +1,11 @@
 import { ORDER_STATUSES, PAYMENT_STATUSES } from "./constants";
-import { Timestamp } from "firebase/firestore";
 
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
 export interface CakeOrder {
   id: string;
-  order_id?: number; // Kept for compatibility if needed, but firestore uses id.
-  created_at: string | Timestamp;
+  created_at: string;
   customer_name: string;
   phone_number: string;
   cake_category: string;

@@ -42,7 +42,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Timestamp } from 'firebase/firestore';
 
 interface DashboardClientProps {
   initialOrders: CakeOrder[];
@@ -54,45 +53,43 @@ export function DashboardClient({ initialOrders }: DashboardClientProps) {
 
   const handleOrderStatusChange = (orderId: string, newStatus: OrderStatus) => {
     startTransition(async () => {
-        const result = await updateOrderStatus(orderId, newStatus);
-        if (result.success) {
-            toast({ title: "Success", description: result.message });
+        const { error } = await updateOrderStatus(orderId, newStatus);
+        if (error) {
+            toast({ title: "Error", description: error, variant: 'destructive' });
         } else {
-            toast({ title: "Error", description: result.message, variant: 'destructive' });
+            toast({ title: "Success", description: "Order status updated." });
         }
     });
   };
 
   const handlePaymentStatusChange = (orderId: string, newStatus: PaymentStatus) => {
     startTransition(async () => {
-        const result = await updatePaymentStatus(orderId, newStatus);
-        if (result.success) {
-            toast({ title: "Success", description: result.message });
+        const { error } = await updatePaymentStatus(orderId, newStatus);
+        if (error) {
+            toast({ title: "Error", description: error, variant: 'destructive' });
         } else {
-            toast({ title: "Error", description: result.message, variant: 'destructive' });
+            toast({ title: "Success", description: "Payment status updated." });
         }
     });
   };
   
   const handleDeleteOrder = (orderId: string) => {
     startTransition(async () => {
-        const result = await deleteOrder(orderId);
-        if (result.success) {
-            toast({ title: "Success", description: result.message });
+        const { error } = await deleteOrder(orderId);
+        if (error) {
+            toast({ title: "Error", description: error, variant: 'destructive' });
         } else {
-            toast({ title: "Error", description: result.message, variant: 'destructive' });
+            toast({ title: "Success", description: "Order deleted." });
         }
     });
   }
 
-  const formatDate = (dateValue: string | Timestamp) => {
-    if (typeof dateValue === 'string') {
+  const formatDate = (dateValue: string) => {
+    try {
         return format(new Date(dateValue), "dd MMM yyyy");
+    } catch {
+        return 'Invalid Date';
     }
-    if (dateValue instanceof Timestamp) {
-        return format(dateValue.toDate(), "dd MMM yyyy");
-    }
-    return 'Invalid Date';
   }
 
 

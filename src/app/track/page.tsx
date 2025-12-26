@@ -11,15 +11,15 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 async function OrderDetails({ orderId }: { orderId: string }) {
-    const order = await getOrderById(orderId);
+    const { order, error } = await getOrderById(orderId);
 
-    if (!order) {
+    if (error || !order) {
         return (
              <Alert variant="destructive" className="mt-8">
                 <Terminal className="h-4 w-4" />
                 <AlertTitle>Order Not Found</AlertTitle>
                 <AlertDescription>
-                    We couldn't find an order with that ID. Please double-check the ID and try again.
+                    {error || "We couldn't find an order with that ID. Please double-check the ID and try again."}
                 </AlertDescription>
             </Alert>
         )

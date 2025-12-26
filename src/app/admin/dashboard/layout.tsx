@@ -10,14 +10,26 @@ import { Button } from '@/components/ui/button'
 import { signOut } from '@/lib/actions'
 import { CakeIcon } from '@/components/icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useUser } from '@/firebase';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { user, isUserLoading } = useUser();
+  const supabase = createClient();
+  const [user, setUser] = useState<any>(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+      setIsUserLoading(false);
+    }
+    getUser();
+  }, [supabase.auth]);
 
   if (isUserLoading) {
     return <div>Loading...</div>;
