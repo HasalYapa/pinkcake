@@ -3,91 +3,91 @@
     {
       "id": "hero-cake-new",
       "description": "A delicious pink strawberry cake on a stand with fresh berries",
-      "imageUrl": "https://images.unsplash.com/photo-1542007920-992d2c424d09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNnx8Y2FrZXxlbnwwfHx8fDE3NjY3MjkzMDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "cake"
+      "imageUrl": "https://images.unsplash.com/photo-156244010-403a35219420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+      "imageHint": "pink cake"
     },
     {
       "id": "birthday-cake-new",
       "description": "Colorful birthday cake with sprinkles and candles",
-      "imageUrl": "https://images.unsplash.com/photo-1635822120057-b37c15ce1bef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb2xvcmZ1bCUyMGNha2V8ZW58MHx8fHwxNzY2NzI5MTU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "colorful cake"
+      "imageUrl": "https://images.unsplash.com/photo-1571115177228-4614690f13b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+      "imageHint": "birthday cake"
     },
     {
       "id": "bento-cake-new",
       "description": "Cute small bento cake in a lunchbox with korean style decoration",
-      "imageUrl": "https://images.unsplash.com/photo-1627308595171-d1b5d67129c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiZW50byUyMGNha2V8ZW58MHx8fHwxNzY2NzI1NjYzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1627308595171-d1b5d67129c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1335&q=80",
       "imageHint": "bento cake"
     },
     {
       "id": "wedding-cake-new",
       "description": "Elegant white tiered wedding cake with floral decorations",
-      "imageUrl": "https://images.unsplash.com/photo-1627580358573-ea0c4a2cb199?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3ZWRkaW5nJTIwY2FrZXxlbnwwfHx8fDE3NjY3MjM0NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1616690710400-a15d44455158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "wedding cake"
     },
     {
       "id": "custom-cake-new",
       "description": "Unique custom shaped cake with creative design",
-      "imageUrl": "https://images.unsplash.com/photo-1759277513204-b432a70af08f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y3JlYXRpdmUlMjBjYWtlfGVufDB8fHx8MTc2NjcyOTE1NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1606890737304-57a1ca8a5bNz?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "creative cake"
     },
     {
       "id": "avatar-female",
       "description": "Avatar for a female user",
-      "imageUrl": "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3b21hbiUyMGF2YXRhcnxlbnwwfHx8fDE3NjY3MjU2NjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80",
       "imageHint": "woman avatar"
     },
     {
       "id": "midnight-chocolate-dream",
       "description": "Dark chocolate cake with ganache drip",
-      "imageUrl": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY2hvY29sYXRlJTIwY2FrZXxlbnwwfHx8fDE3Njc4OTI0NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1335&q=80",
       "imageHint": "dark chocolate cake"
     },
     {
       "id": "classic-ribbon-cake",
       "description": "Colorful layered ribbon cake slice",
-      "imageUrl": "https://images.unsplash.com/photo-1517427294546-5aa121f68e8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYWtlfGVufDB8fHx8MTc2NjcyOTMwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1621532533363-bce26f8c7075?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "colorful layered cake"
     },
     {
       "id": "berry-bliss-gateau",
       "description": "Strawberry gateau cake with fresh berries",
-      "imageUrl": "https://images.unsplash.com/photo-1535141192574-5d4897c12636?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8Y2FrZXxlbnwwfHx8fDE3NjY3MjkzMDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1611293388250-580290aa3374?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "strawberry gateau"
     },
     {
       "id": "red-velvet-cupcakes",
       "description": "Red velvet cupcakes with cream cheese frosting",
-      "imageUrl": "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjdXAlMjBjYWtlfGVufDB8fHx8MTc2NjcyOTg1NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1614707267537-7892336BLPNA?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "red velvet cupcakes"
     },
     {
       "id": "golden-butter-cake",
       "description": "Simple golden butter cake slice",
-      "imageUrl": "https://images.unsplash.com/photo-1625932948487-10d58571c487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxidXR0ZXIlMjBjYWtlfGVufDB8fHx8MTc2NjcyOTk0OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1586612548834-145a54335356?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "butter cake slice"
     },
     {
       "id": "custom-wedding-tier",
       "description": "Elegant wedding tier cake",
-      "imageUrl": "https://images.unsplash.com/photo-1605563432942-0f863d9df42e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8d2VkZGluZyUyMHRpZXIlMjBjYWtlfGVufDB8fHx8MTc2NjcyOTk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1511382434135-d5963a56461f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "elegant wedding cake"
     },
     {
       "id": "coffee-walnut-delight",
       "description": "Coffee walnut cake with nuts on top",
-      "imageUrl": "https://images.unsplash.com/photo-1604579095789-ea4fd39d5293?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8Q29mZmVlJTIwV2FsbnV0JTIwRGVsaWdodHxlbnwwfHx8fDE3NjY3MzAwNzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80",
       "imageHint": "coffee walnut cake"
     },
     {
       "id": "zesty-lemon-drizzle",
       "description": "Lemon cake with yellow drizzle",
-      "imageUrl": "https://images.unsplash.com/photo-1695275665516-a5958f8febef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxaZXN0eSUyMExlbW9uJTIwRHJpenpsZSUyMGNha2V8ZW58MHx8fHwxNzY2NzMwMTQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1547414368-ac947d00491d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "lemon drizzle cake"
     },
     {
       "id": "about-us-image",
       "description": "A female baker smiling in her kitchen with a freshly baked cake",
-      "imageUrl": "https://images.unsplash.com/photo-1625489409904-324a5e9591e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmZW1hbGUlMjBiYWtlcnxlbnwwfHx8fDE3NjY3MzA0NzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1562778612-e1e0a79935d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
       "imageHint": "baker kitchen"
     }
   ]
