@@ -1,5 +1,4 @@
 import AdminAuthForm from '@/components/admin/admin-auth-form'
-import { CakeIcon } from '@/components/icons'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 import Link from 'next/link'
@@ -14,7 +13,6 @@ export default function AdminLoginPage({
       <div className="w-full max-w-sm p-8 space-y-6">
         <div className="text-center">
           <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-              <CakeIcon className="h-8 w-8 text-primary" />
               <span className="font-headline font-bold text-2xl">pinkcakeboutique Admin</span>
           </Link>
           <h1 className="text-2xl font-semibold tracking-tight">

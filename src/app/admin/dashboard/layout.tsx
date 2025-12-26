@@ -8,7 +8,6 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/lib/actions'
-import { CakeIcon } from '@/components/icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -45,7 +44,6 @@ export default function DashboardLayout({
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-16 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <CakeIcon className="h-6 w-6 text-primary" />
               <span className="font-headline text-lg">pinkcakeboutique</span>
             </Link>
           </div>

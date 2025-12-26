@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { Button } from './ui/button';
-import { CakeIcon } from './icons';
 import { Instagram, Facebook } from 'lucide-react';
 
 function SocialLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -16,7 +14,6 @@ export function Footer() {
         <footer className="bg-card dark:bg-[#1a0c10] border-t px-4 py-10 md:px-10 lg:px-40">
             <div className="flex flex-col md:flex-row justify-between items-center max-w-[1200px] mx-auto gap-6">
                 <div className="flex items-center gap-3">
-                    <CakeIcon className="h-6 w-6 text-primary" />
                     <span className="text-foreground dark:text-white font-bold text-lg">pinkcakeboutique</span>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6">
