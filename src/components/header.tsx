@@ -3,52 +3,68 @@
 import Link from "next/link"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
-import { Menu, Package2 } from "lucide-react"
+import { Menu, ShoppingCart } from "lucide-react"
 import { CakeIcon } from "./icons"
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <Link href={href} className="text-foreground/80 transition-colors hover:text-foreground">
+    <Link href={href} className="text-foreground dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors">
         {children}
     </Link>
 )
 
 export function Header() {
     return (
-        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6 z-50">
-            <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
-                <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
-                    <CakeIcon className="h-7 w-7 text-primary" />
-                    <span className="font-headline font-bold text-xl">CakesLK</span>
+        <header className="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b bg-card/90 dark:bg-background-dark/90 backdrop-blur-md px-6 lg:px-10 py-3">
+            <div className="flex items-center gap-4 text-foreground dark:text-white">
+                <Link href="/" className="flex items-center gap-2">
+                    <CakeIcon className="h-8 w-8 text-primary" />
+                    <h2 className="text-foreground dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">CakesLK</h2>
                 </Link>
-                <div className="flex items-center gap-4 md:gap-5 ml-auto">
+            </div>
+            
+            {/* Desktop Menu */}
+            <div className="hidden lg:flex flex-1 justify-end gap-8">
+                <nav className="flex items-center gap-9">
                     <NavLink href="/">Home</NavLink>
-                    <NavLink href="/order">Order Now</NavLink>
-                    <NavLink href="/track">Track Order</NavLink>
-                </div>
-                <Button asChild>
-                    <Link href="/admin">Admin Login</Link>
-                </Button>
-            </nav>
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-                        <Menu className="h-5 w-5" />
-                        <span className="sr-only">Toggle navigation menu</span>
+                    <NavLink href="#menu">Menu</NavLink>
+                    <NavLink href="#about">About</NavLink>
+                    <NavLink href="#reviews">Reviews</NavLink>
+                </nav>
+                <div className="flex gap-2">
+                    <Button asChild className="font-bold tracking-[0.015em]">
+                        <Link href="/admin">Log In</Link>
                     </Button>
-                </SheetTrigger>
-                <SheetContent side="left">
-                    <nav className="grid gap-6 text-lg font-medium">
-                        <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
-                             <CakeIcon className="h-7 w-7 text-primary" />
-                            <span className="font-headline font-bold text-xl">CakesLK</span>
-                        </Link>
-                        <Link href="/" className="text-foreground/80 hover:text-foreground">Home</Link>
-                        <Link href="/order" className="text-foreground/80 hover:text-foreground">Order Now</Link>
-                        <Link href="/track" className="text-foreground/80 hover:text-foreground">Track Order</Link>
-                        <Link href="/admin" className="text-foreground/80 hover:text-foreground">Admin Login</Link>
-                    </nav>
-                </SheetContent>
-            </Sheet>
+                    <Button variant="outline" size="icon" className="bg-background dark:bg-muted">
+                        <ShoppingCart className="h-5 w-5" />
+                    </Button>
+                </div>
+            </div>
+
+            {/* Mobile Menu */}
+            <div className="lg:hidden">
+                <Sheet>
+                    <SheetTrigger asChild>
+                         <Button variant="ghost" size="icon">
+                            <Menu className="h-6 w-6" />
+                         </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left">
+                        <nav className="grid gap-6 text-lg font-medium p-6">
+                            <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
+                                <CakeIcon className="h-7 w-7 text-primary" />
+                                <span className="font-bold text-xl">CakesLK</span>
+                            </Link>
+                            <NavLink href="/">Home</NavLink>
+                            <NavLink href="#menu">Menu</NavLink>
+                            <NavLink href="#about">About</NavLink>
+                            <NavLink href="#reviews">Reviews</NavLink>
+                            <Button asChild className="w-full mt-4">
+                                <Link href="/admin">Log In</Link>
+                            </Button>
+                        </nav>
+                    </SheetContent>
+                </Sheet>
+            </div>
         </header>
     )
 }

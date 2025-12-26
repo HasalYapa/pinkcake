@@ -1,64 +1,43 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { CakeIcon } from './icons';
+import { Instagram, Facebook } from 'lucide-react';
 
 function SocialLink({ href, children }: { href: string; children: React.ReactNode }) {
     return (
-        <Link href={href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+        <a href={href} target="_blank" rel="noopener noreferrer" className="size-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-card-dark text-foreground dark:text-white hover:bg-primary hover:text-white transition-colors">
             {children}
-        </Link>
+        </a>
     );
 }
 
 export function Footer() {
-    const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    const whatsappLink = `https://wa.me/${whatsappNumber}`;
     return (
-        <footer className="bg-secondary/70 border-t">
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                    <div className="flex flex-col items-center md:items-start">
-                        <Link href="/" className="flex items-center gap-2 mb-4">
-                            <CakeIcon className="h-8 w-8 text-primary" />
-                            <span className="font-headline font-bold text-2xl">CakesLK</span>
-                        </Link>
-                        <p className="text-muted-foreground max-w-sm">
-                            Homemade with love, delivered to your doorstep.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 className="font-headline font-semibold mb-4 text-lg">Quick Links</h3>
-                        <ul className="space-y-2">
-                            <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
-                            <li><Link href="/order" className="hover:text-primary transition-colors">Order Now</Link></li>
-                            <li><Link href="/track" className="hover:text-primary transition-colors">Track Order</Link></li>
-                            <li><Link href="/admin" className="hover:text-primary transition-colors">Admin</Link></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 className="font-headline font-semibold mb-4 text-lg">Contact Us</h3>
-                        <p className="text-muted-foreground mb-4">Have questions? Get in touch!</p>
-                        {whatsappNumber && (
-                           <Button asChild>
-                               <a href={whatsappLink} target="_blank" rel="noopener noreferrer">Contact on WhatsApp</a>
-                           </Button>
-                        )}
-                         <div className="flex justify-center md:justify-start gap-4 mt-4">
-                            <SocialLink href="https://instagram.com">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><title>Instagram</title><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
-                                <span className="sr-only">Instagram</span>
-                            </SocialLink>
-                            <SocialLink href="https://facebook.com">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><title>Facebook</title><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                                <span className="sr-only">Facebook</span>
-                            </SocialLink>
-                        </div>
-                    </div>
+        <footer className="bg-card dark:bg-[#1a0c10] border-t px-4 py-10 md:px-10 lg:px-40">
+            <div className="flex flex-col md:flex-row justify-between items-center max-w-[1200px] mx-auto gap-6">
+                <div className="flex items-center gap-3">
+                    <CakeIcon className="h-6 w-6 text-primary" />
+                    <span className="text-foreground dark:text-white font-bold text-lg">CakesLK</span>
                 </div>
-                <div className="border-t mt-8 pt-6 text-center text-sm text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} CakesLK. All Rights Reserved.</p>
+                <div className="flex flex-wrap justify-center gap-6">
+                    <Link className="text-sm text-muted-foreground dark:text-text-dark hover:text-primary transition-colors" href="#">Privacy Policy</Link>
+                    <Link className="text-sm text-muted-foreground dark:text-text-dark hover:text-primary transition-colors" href="#">Terms of Service</Link>
+                    <Link className="text-sm text-muted-foreground dark:text-text-dark hover:text-primary transition-colors" href="#">Delivery Info</Link>
+                </div>
+                <div className="flex gap-4">
+                    <SocialLink href="https://instagram.com">
+                        <Instagram className="h-4 w-4" />
+                        <span className="sr-only">Instagram</span>
+                    </SocialLink>
+                    <SocialLink href="https://facebook.com">
+                        <Facebook className="h-4 w-4" />
+                        <span className="sr-only">Facebook</span>
+                    </SocialLink>
                 </div>
             </div>
+            <div className="mt-8 text-center text-xs text-muted-foreground dark:text-text-dark/50">
+                 © {new Date().getFullYear()} CakesLK. All Rights Reserved.
+             </div>
         </footer>
     );
 }
