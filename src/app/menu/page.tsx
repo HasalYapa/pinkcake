@@ -1,10 +1,12 @@
+'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { placeholderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Heart, SlidersHorizontal, ShoppingCart, ChevronLeft, ChevronRight, User, Edit } from 'lucide-react';
+import { Search, Heart, SlidersHorizontal, ShoppingCart, ChevronLeft, ChevronRight, Edit } from 'lucide-react';
 
 const menuItems = [
     {
@@ -12,7 +14,8 @@ const menuItems = [
         name: "Midnight Chocolate Dream",
         description: "Rich dark chocolate layers with premium ganache drip and cocoa dusting.",
         price: 4500,
-        imageHint: "dark chocolate cake"
+        imageHint: "dark chocolate cake",
+        category: "Gateaux"
     },
     {
         id: "classic-ribbon-cake",
@@ -20,28 +23,32 @@ const menuItems = [
         description: "Traditional Sri Lankan ribbon cake with creamy butter icing and vanilla layers.",
         price: 3800,
         badge: "Best Seller",
-        imageHint: "colorful layered cake"
+        imageHint: "colorful layered cake",
+        category: "Birthday"
     },
     {
         id: "berry-bliss-gateau",
         name: "Berry Bliss Gateau",
         description: "Light sponge cake layered with fresh strawberry mousse and topped with berries.",
         price: 5200,
-        imageHint: "strawberry gateau"
+        imageHint: "strawberry gateau",
+        category: "Gateaux"
     },
     {
         id: "red-velvet-cupcakes",
         name: "Red Velvet Cupcakes (6)",
         description: "Moist red velvet cupcakes topped with our signature cream cheese frosting.",
         price: 1800,
-        imageHint: "red velvet cupcakes"
+        imageHint: "red velvet cupcakes",
+        category: "Cupcakes"
     },
     {
         id: "golden-butter-cake",
         name: "Golden Butter Cake",
         description: "A timeless classic. Soft, buttery sponge perfect for tea time.",
         price: 2500,
-        imageHint: "butter cake slice"
+        imageHint: "butter cake slice",
+        category: "Birthday"
     },
     {
         id: "custom-wedding-tier",
@@ -49,24 +56,26 @@ const menuItems = [
         description: "Elegant multi-tier cakes with floral arrangements. Price varies by customization.",
         price: 15000,
         isQuote: true,
-        imageHint: "elegant wedding cake"
+        imageHint: "elegant wedding cake",
+        category: "Custom Tiers"
     },
     {
         id: "coffee-walnut-delight",
         name: "Coffee Walnut Delight",
         description: "Infused with local coffee and topped with caramelized walnuts.",
         price: 4200,
-        imageHint: "coffee walnut cake"
+        imageHint: "coffee walnut cake",
+        category: "Gateaux"
     },
     {
         id: "zesty-lemon-drizzle",
         name: "Zesty Lemon Drizzle",
         description: "Tangy lemon sponge soaked in citrus syrup with a crunchy sugar top.",
         price: 3000,
-        imageHint: "lemon drizzle cake"
+        imageHint: "lemon drizzle cake",
+        category: "Birthday"
     },
 ];
-
 
 const categories = [
     "All Cakes",
@@ -78,6 +87,17 @@ const categories = [
 ];
 
 export default function MenuPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All Cakes');
+
+    const filteredMenuItems = menuItems.filter(item => {
+        const matchesCategory = selectedCategory === 'All Cakes' || item.category === selectedCategory || (item.category === 'Custom Tiers' && item.name.toLowerCase().includes('wedding'));
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              item.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
+
+
     return (
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-8">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-6 text-sm">
@@ -100,12 +120,23 @@ export default function MenuPage() {
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <Search className="text-muted-foreground group-focus-within:text-primary transition-colors" />
                     </div>
-                    <Input className="pl-12 pr-4 py-3 h-auto rounded-xl bg-card border-border text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="Search for cakes, flavors..." type="text"/>
+                    <Input 
+                        className="pl-12 pr-4 py-3 h-auto rounded-xl bg-card border-border text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" 
+                        placeholder="Search for cakes, flavors..." 
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                    {categories.map((category, index) => (
-                         <Button key={category} variant={index === 0 ? "default" : "outline"} className="px-5 py-2 rounded-xl text-sm font-bold transition-transform hover:-translate-y-0.5 shadow-sm">
+                    {categories.map((category) => (
+                         <Button 
+                            key={category} 
+                            variant={selectedCategory === category ? "default" : "outline"} 
+                            className="px-5 py-2 rounded-xl text-sm font-bold transition-transform hover:-translate-y-0.5 shadow-sm"
+                            onClick={() => setSelectedCategory(category)}
+                        >
                             {category}
                          </Button>
                     ))}
@@ -113,7 +144,7 @@ export default function MenuPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                {menuItems.map((item) => {
+                {filteredMenuItems.map((item) => {
                      const image = placeholderImages.find(p => p.id === item.id);
                      return (
                         <div key={item.id} className="group flex flex-col bg-card rounded-2xl p-4 shadow-sm hover:shadow-xl hover:shadow-primary/5 border border-border transition-all duration-300">
@@ -169,6 +200,12 @@ export default function MenuPage() {
                      )
                 })}
             </div>
+            {filteredMenuItems.length === 0 && (
+                <div className="text-center py-16 text-muted-foreground">
+                    <p className="text-lg font-semibold">No cakes found</p>
+                    <p>Try adjusting your search or filter.</p>
+                </div>
+            )}
 
              <div className="mt-12 flex justify-center">
                 <nav aria-label="Pagination" className="flex items-center gap-2">
