@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardClient } from "@/components/admin/dashboard-client";
 import { CakeOrder } from "@/lib/types";
 import {
@@ -11,9 +11,11 @@ import {
 import { DollarSign, Package } from "lucide-react";
 import { startOfMonth, startOfToday } from "date-fns";
 import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export default function DashboardPage() {
     const supabase = createClient();
+    const [user, setUser] = useState<User | null>(null);
     const [orders, setOrders] = useState<CakeOrder[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -23,7 +25,42 @@ export default function DashboardPage() {
     const [totalRevenue, setTotalRevenue] = useState(0);
 
     useEffect(() => {
+      const getInitialUser = async () => {
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        setUser(currentUser);
+        if (!currentUser) {
+          setLoading(false);
+        }
+      };
+
+      getInitialUser();
+
+      const { data: authListener } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          if (event === 'SIGNED_OUT') {
+            setOrders([]);
+          }
+        }
+      );
+
+      return () => {
+        authListener.subscription.unsubscribe();
+      };
+    }, [supabase]);
+
+
+    useEffect(() => {
+        if (!user) {
+            // If there's no user, don't attempt to fetch orders.
+            if (!loading) setLoading(true); // Reset loading state if user logs out
+            return;
+        };
+
         const fetchOrders = async () => {
+            setLoading(true);
+            setError(null);
             const { data: ordersData, error: err } = await supabase
                 .from('orders')
                 .select('*')
@@ -74,7 +111,7 @@ export default function DashboardPage() {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [supabase]);
+    }, [user, supabase]);
 
     if (loading) {
         return <div>Loading dashboard...</div>
