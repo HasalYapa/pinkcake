@@ -3,18 +3,14 @@ import { Suspense } from "react";
 
 export default function OrderPage() {
     return (
-        <div className="container mx-auto px-4 py-8 md:py-16">
-            <div className="max-w-3xl mx-auto">
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-headline font-bold">Create Your Dream Cake</h1>
-                    <p className="mt-2 text-lg text-muted-foreground">
-                        Fill out the details below and let us craft something special for you.
-                    </p>
-                </div>
-                <Suspense fallback={<div>Loading form...</div>}>
-                    <OrderForm />
-                </Suspense>
+        <div className="w-full max-w-[1280px] mx-auto px-4 md:px-10 py-8">
+             <div className="mb-10">
+                <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] mb-2">Customize Your Cake</h1>
+                <p className="text-muted-foreground text-lg font-normal">Freshly baked with love and personalized just for you.</p>
             </div>
+            <Suspense fallback={<div>Loading form...</div>}>
+                <OrderForm />
+            </Suspense>
         </div>
     );
 }

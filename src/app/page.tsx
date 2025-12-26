@@ -19,13 +19,13 @@ const categories = [
     imageId: 'bento-cake-new' 
   },
   { 
-    name: 'Wedding Structures',
+    name: 'Wedding Cakes',
     description: "Elegant structures and real cakes for your big day. Consultation required.",
     buttonText: "Book Consult",
     imageId: 'wedding-cake-new'
   },
   { 
-    name: 'Custom Designs', 
+    name: 'Custom Cakes', 
     description: "Have a specific design in mind? Upload your photo and we'll bake it.",
     buttonText: "Upload Design",
     imageId: 'custom-cake-new'
@@ -126,7 +126,7 @@ export default function Home() {
                     const categoryImage = placeholderImages.find(p => p.id === category.imageId);
                     return (
                         <div key={category.name} className="@container group">
-                            <div className="flex flex-col items-stretch justify-start rounded-2xl @xl:flex-row @xl:items-center shadow-lg hover:shadow-xl transition-shadow bg-background dark:bg-[#221016] border border-gray-100 dark:border-[#3a1f26] overflow-hidden h-full">
+                            <div className="flex flex-col items-stretch justify-start rounded-2xl @xl:flex-row @xl:items-center shadow-lg hover:shadow-xl transition-shadow bg-background dark:bg-[#221016] border border-gray-100 dark:border-muted overflow-hidden h-full">
                                 <div className="relative w-full @xl:w-1/2 h-48 @xl:h-full">
                                     {categoryImage && (
                                         <Image
@@ -206,7 +206,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {reviews.map((review, index) => (
-                    <div key={index} className="bg-background dark:bg-background-dark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-muted flex flex-col gap-4">
+                    <div key={index} className="bg-background dark:bg-background-dark p-6 rounded-2xl shadow-sm border border-border flex flex-col gap-4">
                         <div className="flex gap-1 text-yellow-400">
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} className={`w-5 h-5 ${i < Math.floor(review.stars) ? 'fill-current' : ''} ${review.stars % 1 !== 0 && i === Math.floor(review.stars) ? 'star-half' : ''}`} />

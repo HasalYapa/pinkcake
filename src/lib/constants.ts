@@ -1,7 +1,7 @@
 export const CAKE_CATEGORIES = [
   "Birthday Cakes",
-  "Bento Cakes",
   "Wedding Cakes",
+  "Cupcakes",
   "Custom Cakes",
 ];
 
@@ -12,13 +12,11 @@ export const CAKE_SIZES = [
 ];
 
 export const CAKE_FLAVORS = [
-  "Chocolate Fudge",
-  "Vanilla Bean",
-  "Red Velvet",
+  "Classic Butter Cake",
+  "Rich Chocolate",
   "Ribbon Cake",
-  "Coffee",
-  "Butter Cake",
-  "Custom",
+  "Coffee Cake",
+  "Red Velvet",
 ];
 
 export const ORDER_STATUSES = [

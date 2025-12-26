@@ -16,6 +16,7 @@ const orderSchema = z.object({
   delivery_date: z.string().min(1, { message: "Please pick a delivery date." }),
   delivery_location: z.string().min(5, { message: "Delivery address is required." }),
   total_price: z.coerce.number(),
+  reference_image: z.any().optional(),
 });
 
 // Mock AI function
