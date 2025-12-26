@@ -20,9 +20,6 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-16">
                     <div className="lg:col-span-4 flex flex-col items-start gap-5">
                         <div className="flex items-center gap-3">
-                            <div className="size-10 text-primary flex items-center justify-center bg-primary/10 rounded-full">
-                                <Cake className="!text-[24px]" />
-                            </div>
                             <span className="text-text-main dark:text-white font-extrabold text-2xl tracking-tight">pinkcakeboutique</span>
                         </div>
                         <p className="text-muted-foreground dark:text-text-dark text-base leading-relaxed pr-4">
