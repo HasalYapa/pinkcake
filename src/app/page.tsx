@@ -61,6 +61,7 @@ const reviews = [
 
 export default function Home() {
   const heroImage = placeholderImages.find(p => p.id === 'hero-cake-new');
+  const aboutImage = placeholderImages.find(p => p.id === 'about-us-image');
 
   return (
     <>
@@ -154,8 +155,40 @@ export default function Home() {
         </div>
       </section>
 
+        {/* About Section */}
+        <section id="about" className="px-4 py-16 md:px-10 lg:px-40 bg-background dark:bg-background-dark">
+            <div className="max-w-[1200px] mx-auto w-full flex flex-col lg:flex-row items-center gap-12">
+                <div className="lg:w-1/2">
+                    <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-xl bg-gray-100 dark:bg-gray-800">
+                        {aboutImage && (
+                            <Image
+                                src={aboutImage.imageUrl}
+                                alt={aboutImage.description}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={aboutImage.imageHint}
+                            />
+                        )}
+                    </div>
+                </div>
+                <div className="lg:w-1/2 flex flex-col items-start text-left gap-4">
+                    <span className="text-primary font-bold uppercase tracking-wider">About Us</span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-foreground dark:text-white tracking-tight">Baking Memories, One Cake at a Time</h2>
+                    <p className="text-muted-foreground dark:text-text-dark leading-relaxed">
+                        CakesLK started from a small home kitchen in the heart of Sri Lanka, born from a passion for creating beautiful, delicious cakes that bring people together. We believe every celebration deserves a special centerpiece. We use locally sourced ingredients and traditional recipes passed down through generations, adding our own modern twist.
+                    </p>
+                    <p className="text-muted-foreground dark:text-text-dark leading-relaxed">
+                        From our family to yours, we pour love and care into every single bake. Thank you for letting us be a part of your special moments.
+                    </p>
+                    <Button asChild variant="outline" size="lg" className="mt-4">
+                        <Link href="/contact">Get In Touch</Link>
+                    </Button>
+                </div>
+            </div>
+        </section>
+
       {/* Reviews Section */}
-      <section className="px-4 py-16 md:px-10 lg:px-40 bg-background dark:bg-background-dark" id="reviews">
+      <section className="px-4 py-16 md:px-10 lg:px-40 bg-card dark:bg-card-dark" id="reviews">
         <div className="flex flex-col max-w-[1200px] mx-auto w-full">
             <div className="flex justify-between items-end mb-8">
                 <div>
@@ -163,7 +196,7 @@ export default function Home() {
                     <p className="text-muted-foreground dark:text-text-dark mt-2">See why our customers keep coming back</p>
                 </div>
                 <div className="hidden md:flex gap-2">
-                    <Button size="icon" variant="outline" className='rounded-full bg-card dark:bg-[#221016]'>
+                    <Button size="icon" variant="outline" className='rounded-full bg-background dark:bg-[#221016]'>
                         <ArrowRight className="h-4 w-4 transform rotate-180" />
                     </Button>
                     <Button size="icon" className='rounded-full shadow-lg shadow-primary/20'>
@@ -173,7 +206,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {reviews.map((review, index) => (
-                    <div key={index} className="bg-card dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-muted flex flex-col gap-4">
+                    <div key={index} className="bg-background dark:bg-background-dark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-muted flex flex-col gap-4">
                         <div className="flex gap-1 text-yellow-400">
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} className={`w-5 h-5 ${i < Math.floor(review.stars) ? 'fill-current' : ''} ${review.stars % 1 !== 0 && i === Math.floor(review.stars) ? 'star-half' : ''}`} />

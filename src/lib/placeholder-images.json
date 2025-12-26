@@ -83,6 +83,12 @@
       "description": "Lemon cake with yellow drizzle",
       "imageUrl": "https://images.unsplash.com/photo-1695275665516-a5958f8febef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxaZXN0eSUyMExlbW9uJTIwRHJpenpsZSUyMGNha2V8ZW58MHx8fHwxNzY2NzMwMTQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "lemon drizzle cake"
+    },
+    {
+      "id": "about-us-image",
+      "description": "A female baker smiling in her kitchen with a freshly baked cake",
+      "imageUrl": "https://images.unsplash.com/photo-1562778612-e1e0a79935d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiYWtlciUyMGtpdGNoZW58ZW58MHx8fHwxNzY4MDEyNjU0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "baker kitchen"
     }
   ]
 }
