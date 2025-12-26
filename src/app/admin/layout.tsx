@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'pinkcakeboutique Admin',
-  description: 'Manage orders for pinkcakeboutique',
+  title: 'CakesLK Admin',
+  description: 'Manage orders for CakesLK',
 }
 
 export default function AdminLayout({
@@ -10,5 +10,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="min-h-screen bg-muted/40">{children}</div>
+  return <div className="bg-background">{children}</div>
 }
