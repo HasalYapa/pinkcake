@@ -1,5 +1,7 @@
 import AdminAuthForm from '@/components/admin/admin-auth-form'
 import { CakeIcon } from '@/components/icons'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
 import Link from 'next/link'
 
 export default function AdminLoginPage({
@@ -24,10 +26,17 @@ export default function AdminLoginPage({
         </div>
         <AdminAuthForm />
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center rounded-lg">
+          <p className="mt-4 p-4 bg-destructive/10 text-destructive text-center rounded-lg">
             {searchParams.message}
           </p>
         )}
+         <Alert>
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>Admin Account</AlertTitle>
+            <AlertDescription>
+                Please use the Firebase console to create an admin user with an email and password. The placeholder email is <code className="font-mono bg-muted px-1 rounded-sm">admin@cakes.lk</code>.
+            </AlertDescription>
+        </Alert>
       </div>
     </div>
   )
