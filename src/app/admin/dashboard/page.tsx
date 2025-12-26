@@ -6,7 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -41,7 +41,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -271,8 +271,11 @@ export default function DashboardPage() {
 
     return (
         <>
-            <div style={{ display: 'none' }}>
-              <DashboardHeader />
+            <div className="lg:hidden flex flex-wrap items-end justify-between gap-4 mb-6">
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-foreground text-[28px] font-bold leading-tight tracking-tight">Welcome back!</h1>
+                    <p className="text-muted-foreground text-sm font-normal">Here's what's happening today.</p>
+                </div>
             </div>
             <div className="flex flex-col gap-8 max-w-[1200px] mx-auto">
                 <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
