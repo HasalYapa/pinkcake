@@ -17,12 +17,9 @@ import {
     deleteDoc,
     getDoc,
 } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase';
+import { initializeFirebase } from '@/firebase/server';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { signInWithEmailAndPassword } from 'firebase/auth';
-
-const { firestore, auth } = initializeFirebase();
-const storage = getStorage();
 
 const orderSchema = z.object({
   customer_name: z.string().min(2, { message: "Name is required." }),
@@ -65,6 +62,7 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
 
 
 export async function createOrder(formData: FormData) {
+  const { firestore, storage } = initializeFirebase();
   const validatedFields = orderSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!validatedFields.success) {
@@ -115,7 +113,7 @@ export async function createOrder(formData: FormData) {
 
 export async function getOrderById(orderId: string) {
   if (!orderId) return null;
-  
+  const { firestore } = initializeFirebase();
   try {
     const docRef = doc(firestore, 'orders', orderId);
     const docSnap = await getDoc(docRef);
@@ -139,6 +137,7 @@ export async function getOrderById(orderId: string) {
 
 // Admin Actions
 export async function signIn(formData: FormData) {
+  const { auth } = initializeFirebase();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
@@ -152,11 +151,13 @@ export async function signIn(formData: FormData) {
 }
 
 export async function signOut() {
+  const { auth } = initializeFirebase();
   await auth.signOut();
   return redirect('/admin');
 }
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
+    const { firestore } = initializeFirebase();
     try {
         const orderRef = doc(firestore, "orders", orderId);
         await updateDoc(orderRef, { order_status: status });
@@ -169,6 +170,7 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus) {
 }
 
 export async function updatePaymentStatus(orderId: string, status: PaymentStatus) {
+    const { firestore } = initializeFirebase();
     try {
         const orderRef = doc(firestore, "orders", orderId);
         await updateDoc(orderRef, { payment_status: status });
@@ -181,6 +183,7 @@ export async function updatePaymentStatus(orderId: string, status: PaymentStatus
 }
 
 export async function deleteOrder(orderId: string) {
+    const { firestore } = initializeFirebase();
     try {
         await deleteDoc(doc(firestore, "orders", orderId));
         revalidatePath('/admin/dashboard');
