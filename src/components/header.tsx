@@ -26,9 +26,9 @@ export function Header() {
             <div className="hidden lg:flex flex-1 justify-end gap-8">
                 <nav className="flex items-center gap-9">
                     <NavLink href="/">Home</NavLink>
-                    <NavLink href="#menu">Menu</NavLink>
-                    <NavLink href="#about">About</NavLink>
-                    <NavLink href="#reviews">Reviews</NavLink>
+                    <NavLink href="/menu">Menu</NavLink>
+                    <NavLink href="/#about">About</NavLink>
+                    <NavLink href="/#reviews">Reviews</NavLink>
                 </nav>
                 <div className="flex gap-2">
                     <Button asChild className="font-bold tracking-[0.015em]">
@@ -55,9 +55,9 @@ export function Header() {
                                 <span className="font-bold text-xl">CakesLK</span>
                             </Link>
                             <NavLink href="/">Home</NavLink>
-                            <NavLink href="#menu">Menu</NavLink>
-                            <NavLink href="#about">About</NavLink>
-                            <NavLink href="#reviews">Reviews</NavLink>
+                            <NavLink href="/menu">Menu</NavLink>
+                            <NavLink href="/#about">About</NavLink>
+                            <NavLink href="/#reviews">Reviews</NavLink>
                             <Button asChild className="w-full mt-4">
                                 <Link href="/admin">Log In</Link>
                             </Button>

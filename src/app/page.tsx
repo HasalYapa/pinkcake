@@ -82,7 +82,7 @@ export default function Home() {
                 <Link href="/order">Order Now</Link>
               </Button>
                <Button asChild size="lg" variant="outline" className="flex-1 sm:flex-none text-base font-bold leading-normal h-12 px-6">
-                <Link href="#menu">View Menu</Link>
+                <Link href="/menu">View Menu</Link>
               </Button>
             </div>
             <div className="flex items-center gap-2 mt-2">
@@ -114,7 +114,7 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="px-4 py-12 md:px-10 lg:px-40 bg-card dark:bg-card-dark rounded-t-[3rem] shadow-[0_-10px_40px_rgba(0,0,0,0.03)]" id="menu">
+      <section className="px-4 py-12 md:px-10 lg:px-40 bg-card dark:bg-card-dark rounded-t-[3rem] shadow-[0_-10px_40px_rgba(0,0,0,0.03)]" id="menu-preview">
         <div className="flex flex-col max-w-[1200px] mx-auto w-full">
             <div className="text-center pb-10 pt-5">
                 <h2 className="text-foreground dark:text-white tracking-tight text-[28px] md:text-4xl font-extrabold leading-tight px-4">Our Specialties</h2>

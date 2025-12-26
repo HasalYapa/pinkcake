@@ -35,6 +35,54 @@
       "description": "Avatar for a female user",
       "imageUrl": "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3b21hbiUyMGF2YXRhcnxlbnwwfHx8fDE3NjY3MjU2NjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "woman avatar"
+    },
+    {
+      "id": "midnight-chocolate-dream",
+      "description": "Dark chocolate cake with ganache drip",
+      "imageUrl": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY2hvY29sYXRlJTIwY2FrZXxlbnwwfHx8fDE3Njc4OTI0NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dark chocolate cake"
+    },
+    {
+      "id": "classic-ribbon-cake",
+      "description": "Colorful layered ribbon cake slice",
+      "imageUrl": "https://images.unsplash.com/photo-1616690711472-3a3348123348?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyaWJib24lMjBjYWtlfGVufDB8fHx8MTc2Nzg5MjUwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "colorful layered cake"
+    },
+    {
+      "id": "berry-bliss-gateau",
+      "description": "Strawberry gateau cake with fresh berries",
+      "imageUrl": "https://images.unsplash.com/photo-1614707267537-85a793928a34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzdHJhd2JlcnJ5JTIwZ2F0ZWF1fGVufDB8fHx8MTc2Nzg5MjUzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "strawberry gateau"
+    },
+    {
+      "id": "red-velvet-cupcakes",
+      "description": "Red velvet cupcakes with cream cheese frosting",
+      "imageUrl": "https://images.unsplash.com/photo-1614708534362-04575b5a04a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWQlMjB2ZWx2ZXQlMjBjdXBjYWtlc3xlbnwwfHx8fDE3Njc4OTI1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red velvet cupcakes"
+    },
+    {
+      "id": "golden-butter-cake",
+      "description": "Simple golden butter cake slice",
+      "imageUrl": "https://images.unsplash.com/photo-1543336472-fcf473332242?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxidXR0ZXIlMjBjYWtlfGVufDB8fHx8MTc2Nzg5MjYxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "butter cake slice"
+    },
+    {
+      "id": "custom-wedding-tier",
+      "description": "Elegant wedding tier cake",
+      "imageUrl": "https://images.unsplash.com/photo-1588201211756-3a354143a41e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxlbGVnYW50JTIwd2VkZGluZyUyMGNha2V8ZW58MHx8fHwxNzY3ODkyNjQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "elegant wedding cake"
+    },
+    {
+      "id": "coffee-walnut-delight",
+      "description": "Coffee walnut cake with nuts on top",
+      "imageUrl": "https://images.unsplash.com/photo-1469033393246-1053a4a036c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb2ZmZWUlMjB3YWxudXQlMjBjYWtlfGVufDB8fHx8MTc2Nzg5MjY2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coffee walnut cake"
+    },
+    {
+      "id": "zesty-lemon-drizzle",
+      "description": "Lemon cake with yellow drizzle",
+      "imageUrl": "https://images.unsplash.com/photo-1612202690684-13a89152b10e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZW1vbiUyMGRyaXp6bGUlMjBjYWtlfGVufDB8fHx8MTc2Nzg5MjcwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lemon drizzle cake"
     }
   ]
 }
