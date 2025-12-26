@@ -1,0 +1,206 @@
+{
+  "entities": {
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a customer's cake order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Name of the customer who placed the order."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the customer."
+        },
+        "cakeType": {
+          "type": "string",
+          "description": "Type of cake ordered (e.g., Birthday, Wedding)."
+        },
+        "cakeSize": {
+          "type": "string",
+          "description": "Size of the cake (e.g., 1kg, 1.5kg)."
+        },
+        "flavor": {
+          "type": "string",
+          "description": "Flavor of the cake."
+        },
+        "message": {
+          "type": "string",
+          "description": "Message to be written on the cake."
+        },
+        "deliveryDate": {
+          "type": "string",
+          "description": "Requested delivery date.",
+          "format": "date-time"
+        },
+        "deliveryLocation": {
+          "type": "string",
+          "description": "Delivery address for the order."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the reference image uploaded by the customer.",
+          "format": "uri"
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "Total price of the order."
+        },
+        "orderStatusId": {
+          "type": "string",
+          "description": "Reference to OrderStatus. (Relationship: OrderStatus 1:N Order)"
+        },
+        "paymentStatus": {
+          "type": "string",
+          "description": "Payment status of the order (e.g., Pending, Paid)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the order was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "customerName",
+        "phoneNumber",
+        "cakeType",
+        "cakeSize",
+        "flavor",
+        "deliveryDate",
+        "deliveryLocation",
+        "totalPrice",
+        "orderStatusId",
+        "paymentStatus",
+        "createdAt"
+      ]
+    },
+    "OrderStatus": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderStatus",
+      "type": "object",
+      "description": "Represents the status of an order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order status."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the order (e.g., Pending, Accepted, Baking, Ready, Delivered)."
+        }
+      },
+      "required": [
+        "id",
+        "status"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents an admin user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the admin user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the admin user.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores order data. Includes denormalized 'userId' field (if customers have accounts) for authorization independence, enabling rules to verify order ownership without 'get()' calls. Admins will have read/write access to all orders, while customers (if accounts exist) will have read access only to orders associated with their userId.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "Unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orderStatuses/{orderStatusId}",
+        "definition": {
+          "entityName": "OrderStatus",
+          "schema": {
+            "$ref": "#/backend/entities/OrderStatus"
+          },
+          "description": "Stores possible order status values. Accessible to admin for updates, and readable by anyone.",
+          "params": [
+            {
+              "name": "orderStatusId",
+              "description": "Unique identifier for the order status."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores admin user data. Access restricted to the user and admins only.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Indicates admin role. Existence of document grants admin privileges. Accessible to admins only.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "This Firestore structure is designed to support the CakesLK application, focusing on security, scalability, and ease of debugging. It adheres to the principle of Authorization Independence by avoiding hierarchical `get()` calls in security rules, relying instead on denormalization of authorization data where needed. The structure also facilitates secure list operations by segregating data based on access requirements.\n\n**Authorization Independence:** The design emphasizes authorization independence. The most crucial aspect of this design is how roles are handled. The database uses explicit collections for admin roles (`/roles_admin/{uid}`). This enables authorization rules based solely on the existence of a document, eliminating the need for `get()` calls to parent documents. The ownership for the `orders` collection can be managed either by restricting write access to admins only, or by associating the order with a `userId` if customers were given accounts in the system, in which case read access to a particular order would be granted to the `userId` associated to the order.\n\n**Structural Segregation:** The `/orders` collection segregates all order data, ensuring consistent security posture across all order documents. The `/orderStatuses` collection is separated from orders to hold possible status values for orders. The `/users` collection stores the admin user's data for the backend.\n\n**Access Modeling:** We utilize Path-Based Ownership for admin user data stored in the `/users/{userId}` collection. Global admin roles are modeled using the existence of documents in the `/roles_admin/{uid}` collection.\n\n**QAPs (Rules are not Filters):** The design supports secure `list` operations. Access to the `/orders` collection is restricted to authenticated admins only, thus enabling secure listing of orders. If customers were provided with their own accounts, orders can be further segregated under `/users/{userId}/orders/{orderId}` where the access is restricted to the user and admins only.\n\n**Invariants:** The structure supports data integrity with regards to timestamps by using the `createdAt` field. Ownership is enforced through structural patterns and security rules."
+  }
+}

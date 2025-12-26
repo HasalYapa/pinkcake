@@ -1,0 +1,138 @@
+/**
+ * Core Philosophy:
+ * This ruleset implements a role-based access control (RBAC) model tailored for an e-commerce
+ * application (CakesLK). The primary distinction is between general authenticated users (who can be
+ * anonymous) and privileged 'admin' users. The core security principle is that anyone can submit
+ * an order, but only verified admins can view, manage, and process those orders.
+ *
+ * Data Structure:
+ * The data is organized into flat, top-level collections for performance and clarity:
+ * - /users/{userId}: Private profiles for admin users.
+ * - /roles_admin/{userId}: An index collection where the existence of a document grants
+ *   a user admin privileges throughout the database.
+ * - /orders/{orderId}: Contains all customer orders.
+ * - /orderStatuses/{orderStatusId}: A reference collection for order status options
+ *   (e.g., 'Pending', 'Baking').
+ *
+ * Key Security Decisions:
+ * - Admin Role Management: Admin status is granted by the existence of a document at
+ *   /roles_admin/{userId}. This allows for highly efficient and secure role checks using `exists()`
+ *   without needing to read any document data.
+ * - Order Submission: To support a frictionless customer experience, any authenticated user,
+ *   including those authenticated anonymously, is permitted to create a new order.
+ * - Order Management: All read and write access to the main `/orders` collection (beyond the
+ *   initial creation) is strictly limited to users with the admin role. This protects customer
+ *   data and prevents unauthorized modifications.
+ * - Public Reference Data: The `/orderStatuses` collection is publicly readable to allow the
+ *   client application to display status information, but it can only be modified by admins.
+ *
+ * Denormalization for Authorization:
+ * This ruleset's security model hinges on the `/roles_admin` collection. Instead of placing an
+ * `isAdmin` flag on a user document (which would require a `get()` call in every rule), we use
+ * the existence of a document in a specific path. This makes the `isAdmin()` check a fast,
+ * non-billable read operation within the rules engine, embodying the principle of Authorization
+ * Independence.
+ *
+ * Structural Segregation:
+ * Data is segregated by function and access level. For example, sensitive admin roles are in
+ * `/roles_admin`, transactional data is in `/orders`, and public reference data is in
+ * `/orderStatuses`. This clear separation simplifies rule logic and enhances security.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for reusable logic
+    
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    /**
+     * Checks if the requesting user's UID matches the provided userId.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    /**
+     * Checks if the document being accessed already exists.
+     * Crucial for secure update and delete operations.
+     */
+    function isExistingDoc() {
+      return resource != null;
+    }
+    
+    /**
+     * Checks if the authenticated user has admin privileges.
+     * This is determined by the existence of a document in the /roles_admin collection
+     * matching the user's UID. This is a highly performant and secure pattern.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * @description Stores admin user profile data. Access is strictly limited to the owner of the document.
+     * @path /users/{userId}
+     * @allow (create) A signed-in user with UID 'admin123' creates their own profile at `/users/admin123`.
+     * @deny (get) User 'admin456' tries to read the profile of 'admin123'.
+     * @principle Restricts access to a user's own data tree, enforcing strict data privacy even among admins.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && isExistingDoc();
+      allow delete: if isOwner(userId) && isExistingDoc();
+    }
+
+    /**
+     * @description Manages admin role grants. Only existing admins can view or modify this collection.
+     * @path /roles_admin/{userId}
+     * @allow (create) An existing admin user creates a document for a new user to grant them admin rights.
+     * @deny (list) A non-admin user attempts to list all users with admin roles.
+     * @principle Secures administrative roles using a role-based access control pattern. All access is gated by the `isAdmin()` check.
+     */
+    match /roles_admin/{userId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Stores the list of possible order statuses. This data is public for any client to read, but only admins can manage the list.
+     * @path /orderStatuses/{orderStatusId}
+     * @allow (get) Any user, including unauthenticated ones, can read a status like `/orderStatuses/baking`.
+     * @deny (create) A non-admin user attempts to add a new status.
+     * @principle Implements a "Public Read with Owner-Only Writes" pattern, where "Owner" is defined as any admin user.
+     */
+    match /orderStatuses/{orderStatusId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Contains all customer orders. Allows any authenticated user (including anonymous) to create an order, but only admins can view or manage them.
+     * @path /orders/{orderId}
+     * @allow (create) An anonymous but authenticated user can create a new order document in `/orders`.
+     * @deny (get) A non-admin authenticated user tries to read an order they just created.
+     * @principle Segregates create access from management access, enabling a public order submission flow managed by a private admin team.
+     */
+    match /orders/{orderId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isSignedIn();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+  }
+}
