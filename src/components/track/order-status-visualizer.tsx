@@ -24,7 +24,7 @@ export default function OrderStatusVisualizer({ currentStatus }: OrderStatusVisu
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center border-2",
                   isCompleted ? "bg-primary border-primary text-primary-foreground" : "",
-                  isCurrent ? "bg-accent border-accent-foreground text-accent-foreground" : "",
+                  isCurrent ? "bg-primary/20 border-primary text-primary" : "",
                   isFuture ? "bg-muted border-muted-foreground/50 text-muted-foreground" : ""
                 )}
               >

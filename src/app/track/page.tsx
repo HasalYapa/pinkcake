@@ -41,8 +41,8 @@ async function OrderDetails({ orderId }: { orderId: string }) {
                         <strong>Payment Status:</strong> 
                         <Badge variant="outline" className={cn(
                             order.payment_status === 'Paid' 
-                            ? 'bg-success/20 text-success border-transparent' 
-                            : 'bg-warning/20 text-warning border-transparent'
+                            ? 'bg-green-500/20 text-green-700 border-transparent' 
+                            : 'bg-yellow-500/20 text-yellow-700 border-transparent'
                         )}>
                            {order.payment_status}
                         </Badge>
@@ -54,8 +54,8 @@ async function OrderDetails({ orderId }: { orderId: string }) {
 }
 
 
-export default function TrackPage({ searchParams }: { searchParams: { id?: string } }) {
-    const orderId = searchParams.id;
+export default function TrackPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+    const orderId = typeof searchParams.id === 'string' ? searchParams.id : undefined;
     
     return (
         <div className="container mx-auto px-4 py-8 md:py-16">
