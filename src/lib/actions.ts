@@ -7,8 +7,8 @@ import { CakeOrder, OrderStatus, PaymentStatus } from './types';
 import { suggestCake } from '@/ai/ai-cake-suggestion';
 
 export async function getAiCakeSuggestion(occasion: string, category: string) {
-    if (!occasion || !category) {
-        return { error: 'Occasion and category are required for a suggestion.' };
+    if (!category) {
+        return { error: 'Please select a category to get a suggestion.' };
     }
     
     try {
@@ -16,7 +16,7 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
             category: category,
             size: '',
             flavor: '',
-            message: occasion,
+            message: occasion || '',
             deliveryDate: '',
             deliveryLocation: ''
         });
