@@ -3,6 +3,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'pinkcakeboutique - Delicious Homemade Cakes in Sri Lanka',
@@ -25,7 +26,9 @@ export default function RootLayout({
           <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
             <Header />
             <main className="flex-1">
-              {children}
+              <Suspense>
+                {children}
+              </Suspense>
             </main>
             <Footer />
             <Toaster />

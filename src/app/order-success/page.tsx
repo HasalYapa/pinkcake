@@ -38,16 +38,13 @@ export default function OrderSuccessPage() {
                     <p className="text-2xl md:text-3xl font-bold font-mono tracking-widest text-primary break-all px-2">{orderId}</p>
                 </div>
                 <p className="mt-6 text-muted-foreground">
-                    Please keep this ID safe. You can use it to track your order.
+                    Please keep this ID safe. You can use it to track your order in the future.
                 </p>
                 <div className="mt-8 space-y-4">
                     <Button asChild size="lg" className="w-full md:w-auto">
                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                             Confirm Order on WhatsApp
                         </a>
-                    </Button>
-                    <Button asChild variant="outline" size="lg" className="w-full md:w-auto md:ml-4">
-                         <Link href={`/track?id=${orderId}`}>Track Your Order</Link>
                     </Button>
                 </div>
                  <Button asChild variant="link" className="mt-8">

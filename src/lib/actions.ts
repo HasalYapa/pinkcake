@@ -4,27 +4,23 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CakeOrder, OrderStatus, PaymentStatus } from './types';
-
-// Mock AI function
-async function getAiSuggestionFromFlow(prompt: string): Promise<string> {
-    console.log(`Getting AI suggestion for: ${prompt}`);
-    try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return `Based on "${prompt}", a Chocolate Fudge cake with a 'Happy Birthday' message would be a great choice! It's a classic crowd-pleaser.`;
-    } catch (error) {
-        console.error("AI flow not found or failed. Using mock response.", error);
-        return `We think a classic Chocolate Fudge cake would be perfect for "${prompt}"!`;
-    }
-}
-
+import { suggestCake } from '@/ai/ai-cake-suggestion';
 
 export async function getAiCakeSuggestion(occasion: string, category: string) {
     if (!occasion || !category) {
         return { error: 'Occasion and category are required for a suggestion.' };
     }
-    const prompt = `Suggest a cake for a ${occasion} from the ${category} category.`;
+    
     try {
-        const suggestion = await getAiSuggestionFromFlow(prompt);
+        const result = await suggestCake({
+            category: category,
+            size: '',
+            flavor: '',
+            message: occasion,
+            deliveryDate: '',
+            deliveryLocation: ''
+        });
+        const suggestion = `${result.suggestion}. ${result.reason}`;
         return { suggestion };
     } catch (error) {
         console.error('Error getting AI suggestion:', error);
