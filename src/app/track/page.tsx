@@ -53,8 +53,11 @@ async function OrderDetails({ orderId }: { orderId: string }) {
     );
 }
 
+interface PageProps {
+    searchParams: { [key: string]: string | string[] | undefined };
+}
 
-export default function TrackPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default function TrackPage({ searchParams }: PageProps) {
     const orderId = typeof searchParams.id === 'string' ? searchParams.id : undefined;
     
     return (
