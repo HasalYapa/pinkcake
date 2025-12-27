@@ -53,7 +53,7 @@ async function OrderDetails({ orderId }: { orderId: string }) {
     );
 }
 
-export default function TrackPage({
+export default async function TrackPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
