@@ -15,11 +15,7 @@ import {z} from 'genkit';
 
 const SuggestCakeInputSchema = z.object({
   category: z.string().describe('The category of cake the user is interested in (e.g., Birthday, Wedding).'),
-  size: z.string().describe('The size of the cake the user is interested in (e.g., 1kg, 1.5kg, 2kg).'),
-  flavor: z.string().describe('The flavor of cake the user is interested in.'),
-  message: z.string().describe('The message the user wants to add on the cake.'),
-  deliveryDate: z.string().describe('The desired delivery date for the cake.'),
-  deliveryLocation: z.string().describe('The delivery location for the cake.'),
+  message: z.string().describe('The message the user wants to add on the cake. This can give a hint about the occasion.').optional(),
 });
 export type SuggestCakeInput = z.infer<typeof SuggestCakeInputSchema>;
 
@@ -37,7 +33,7 @@ const suggestCakePrompt = ai.definePrompt({
   name: 'suggestCakePrompt',
   input: {schema: SuggestCakeInputSchema},
   output: {schema: SuggestCakeOutputSchema},
-  prompt: `Based on the user's cake preferences, suggest a specific cake and reason for the suggestion.\n\nCake Category: {{{category}}}\nCake Size: {{{size}}}\nCake Flavor: {{{flavor}}}\nMessage on Cake: {{{message}}}\nDelivery Date: {{{deliveryDate}}}\nDelivery Location: {{{deliveryLocation}}}\n\nSuggestion:`
+  prompt: `Based on the user's cake preferences, suggest a specific cake and reason for the suggestion.\n\nCake Category: {{{category}}}\nMessage on Cake (for occasion context): {{{message}}}\n\nSuggestion:`
 });
 
 const suggestCakeFlow = ai.defineFlow(

@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { CakeOrder, OrderStatus, PaymentStatus } from './types';
 import { suggestCake } from '@/ai/ai-cake-suggestion';
 
-export async function getAiCakeSuggestion(occasion: string, category: string) {
+export async function getAiCakeSuggestion(category: string, message: string) {
     if (!category) {
         return { error: 'Please select a category to get a suggestion.' };
     }
@@ -14,11 +14,7 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
     try {
         const result = await suggestCake({
             category: category,
-            size: '',
-            flavor: '',
-            message: occasion || '',
-            deliveryDate: '',
-            deliveryLocation: ''
+            message: message,
         });
         const suggestion = `${result.suggestion}. ${result.reason}`;
         return { suggestion };

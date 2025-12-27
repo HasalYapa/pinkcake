@@ -7,7 +7,7 @@ import { getAiCakeSuggestion } from '@/lib/actions';
 import { Wand2, Loader2 } from 'lucide-react';
 
 interface AiSuggestionProps {
-  getValues: () => { occasion: string; category: string };
+  getValues: () => { message_on_cake: string; cake_category: string };
 }
 
 export default function AiSuggestion({ getValues }: AiSuggestionProps) {
@@ -17,8 +17,8 @@ export default function AiSuggestion({ getValues }: AiSuggestionProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleSuggestion = () => {
-    const { occasion, category } = getValues();
-    if (!category) {
+    const { message_on_cake, cake_category } = getValues();
+    if (!cake_category) {
         setError("Please select a cake category first to get a suggestion.");
         setIsOpen(true);
         return;
@@ -28,8 +28,7 @@ export default function AiSuggestion({ getValues }: AiSuggestionProps) {
     setSuggestion('');
     setIsOpen(true);
     startTransition(async () => {
-      // Pass the form's "occasion" as the "message" for the AI
-      const result = await getAiCakeSuggestion(occasion, category);
+      const result = await getAiCakeSuggestion(cake_category, message_on_cake || '');
       if (result.error) {
         setError(result.error);
       } else {
