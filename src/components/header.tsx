@@ -16,7 +16,7 @@ export function Header() {
         <header className="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b bg-card/90 dark:bg-background-dark/90 backdrop-blur-md px-6 lg:px-10 py-3">
             <div className="flex items-center gap-4 text-foreground dark:text-white">
                 <Link href="/" className="flex items-center gap-2">
-                    <h2 className="text-foreground dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">pinkcakeboutique</h2>
+                    <h2 className="text-foreground dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">pinkcake</h2>
                 </Link>
             </div>
             
@@ -52,7 +52,7 @@ export function Header() {
                         </SheetHeader>
                         <nav className="grid gap-6 text-lg font-medium p-6">
                             <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
-                                <span className="font-bold text-xl">pinkcakeboutique</span>
+                                <span className="font-bold text-xl">pinkcake</span>
                             </Link>
                             <NavLink href="/">Home</NavLink>
                             <NavLink href="/menu">Menu</NavLink>

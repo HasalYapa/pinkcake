@@ -20,7 +20,7 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-16">
                     <div className="lg:col-span-4 flex flex-col items-start gap-5">
                         <div className="flex items-center gap-3">
-                            <span className="text-text-main dark:text-white font-extrabold text-2xl tracking-tight">pinkcakeboutique</span>
+                            <span className="text-text-main dark:text-white font-extrabold text-2xl tracking-tight">pinkcake</span>
                         </div>
                         <p className="text-muted-foreground dark:text-text-dark text-base leading-relaxed pr-4">
                             Handcrafted happiness delivered to your doorstep. We bake memories with the finest ingredients in Sri Lanka.
@@ -66,7 +66,7 @@ export function Footer() {
                         © {new Date().getFullYear()} pinkcakeboutique. All rights reserved.
                     </p>
                     <p className="text-sm text-muted-foreground dark:text-text-dark/60 font-medium flex items-center gap-1">
-                        Made with pinkcakeboutique
+                        Made with pinkcake
                     </p>
                 </div>
             </div>
