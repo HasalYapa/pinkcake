@@ -14,7 +14,7 @@ export async function getAiCakeSuggestion(category: string, message: string) {
     try {
         const result = await suggestCake({
             category: category,
-            message: message,
+            message: message || '',
         });
         const suggestion = `${result.suggestion}. ${result.reason}`;
         return { suggestion };
