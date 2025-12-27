@@ -28,6 +28,7 @@ export default function AiSuggestion({ getValues }: AiSuggestionProps) {
     setSuggestion('');
     setIsOpen(true);
     startTransition(async () => {
+      // Pass the form's "occasion" as the "message" for the AI
       const result = await getAiCakeSuggestion(occasion, category);
       if (result.error) {
         setError(result.error);

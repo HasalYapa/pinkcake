@@ -54,10 +54,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }: React.HTMLAttributes<HTMLElement>) => (
+        IconLeft: ({ ...props }) => (
           <ChevronLeft className="h-4 w-4" {...props} />
         ),
-        IconRight: ({ ...props }: React.HTMLAttributes<HTMLElement>) => (
+        IconRight: ({ ...props }) => (
           <ChevronRight className="h-4 w-4" {...props} />
         ),
       }}
