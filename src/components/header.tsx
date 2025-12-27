@@ -30,10 +30,7 @@ export function Header() {
                 </nav>
                 <div className="flex gap-2">
                     <Button asChild className="font-bold tracking-[0.015em]">
-                        <Link href="/admin">Log In</Link>
-                    </Button>
-                    <Button variant="outline" size="icon" className="bg-background dark:bg-muted">
-                        <User className="h-5 w-5" />
+                        <Link href="/order">Order Now</Link>
                     </Button>
                 </div>
             </div>
@@ -59,7 +56,7 @@ export function Header() {
                             <NavLink href="/#about">About</NavLink>
                             <NavLink href="/#reviews">Reviews</NavLink>
                             <Button asChild className="w-full mt-4">
-                                <Link href="/admin">Log In</Link>
+                                <Link href="/order">Order Now</Link>
                             </Button>
                         </nav>
                     </SheetContent>

@@ -4,20 +4,6 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CakeOrder, OrderStatus, PaymentStatus } from './types';
-import { createClient } from '@/lib/supabase/server';
-
-const orderSchema = z.object({
-  customer_name: z.string().min(2, { message: "Name is required." }),
-  phone_number: z.string().min(10, { message: "A valid phone number is required." }),
-  cake_category: z.string().min(1, { message: "Please select a cake category." }),
-  cake_size: z.string().min(1, { message: "Please select a cake size." }),
-  flavor: z.string().min(1, { message: "Please select a flavor." }),
-  message_on_cake: z.string().max(100).optional(),
-  delivery_date: z.string().min(1, { message: "Please pick a delivery date." }),
-  delivery_location: z.string().min(5, { message: "Delivery address is required." }),
-  total_price: z.coerce.number(),
-  reference_image: z.any().optional(),
-});
 
 // Mock AI function
 async function getAiSuggestionFromFlow(prompt: string): Promise<string> {
@@ -46,149 +32,66 @@ export async function getAiCakeSuggestion(occasion: string, category: string) {
     }
 }
 
+// NOTE: The following functions are placeholders and will not work without a database.
+// You will need to implement your own database logic to make them functional.
+
+const orderSchema = z.object({
+  customer_name: z.string().min(2, { message: "Name is required." }),
+  phone_number: z.string().min(10, { message: "A valid phone number is required." }),
+  cake_category: z.string().min(1, { message: "Please select a cake category." }),
+  cake_size: z.string().min(1, { message: "Please select a cake size." }),
+  flavor: z.string().min(1, { message: "Please select a flavor." }),
+  message_on_cake: z.string().max(100).optional(),
+  delivery_date: z.string().min(1, { message: "Please pick a delivery date." }),
+  delivery_location: z.string().min(5, { message: "Delivery address is required." }),
+  total_price: z.coerce.number(),
+  reference_image: z.any().optional(),
+});
 
 export async function createOrder(formData: FormData) {
-  const supabase = createClient();
+    console.log("createOrder called, but no database is connected.");
+    const validatedFields = orderSchema.safeParse(Object.fromEntries(formData.entries()));
 
-  const validatedFields = orderSchema.safeParse(Object.fromEntries(formData.entries()));
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-  
-  const { ...orderData } = validatedFields.data;
-  
-  let imageUrl: string | null = null;
-  const imageFile = formData.get('reference_image') as File;
-
-  if (imageFile && imageFile.size > 0) {
-    const fileName = `${Date.now()}-${imageFile.name}`;
-    const { data: uploadData, error: uploadError } = await supabase
-        .storage
-        .from('cake-references')
-        .upload(fileName, imageFile);
-
-    if (uploadError) {
-        console.error('Storage Error:', uploadError);
+    if (!validatedFields.success) {
         return {
-            errors: { _form: ['Failed to upload reference image.'] },
+            errors: validatedFields.error.flatten().fieldErrors,
         };
     }
     
-    const { data: urlData } = supabase.storage.from('cake-references').getPublicUrl(uploadData.path);
-    imageUrl = urlData.publicUrl;
-  }
-
-  const newOrder: Omit<CakeOrder, 'id' | 'created_at'> = {
-    ...orderData,
-    image_url: imageUrl,
-    order_status: 'Pending',
-    payment_status: 'Pending',
-  };
-
-  const { data: insertedOrder, error } = await supabase
-    .from('orders')
-    .insert([newOrder])
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Database Error:', error);
-    return {
-      errors: { _form: ['Database error: Failed to create order.'] },
-    };
-  }
-
-  revalidatePath('/');
-  if (insertedOrder) {
-    redirect(`/order-success?id=${insertedOrder.id}`);
-  }
+    // Since there is no database, we'll simulate a success response.
+    const mockOrderId = `mock_${new Date().getTime()}`;
+    console.log("Simulating order creation with data:", validatedFields.data);
+    revalidatePath('/');
+    redirect(`/order-success?id=${mockOrderId}`);
 }
+
 
 export async function getOrderById(orderId: string): Promise<{order: CakeOrder | null, error: string | null}> {
-  if (!orderId) return { order: null, error: "Order ID is required." };
-  const supabase = createClient();
-  try {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('id', orderId)
-      .single();
-
-    if (error) throw error;
-
-    return { order: data as CakeOrder, error: null };
-  } catch (error: any) {
-    console.error('Error fetching order:', error);
-    return { order: null, error: error.message };
-  }
+  console.log(`getOrderById called for ${orderId}, but no database is connected.`);
+  return { order: null, error: "Database not connected. Cannot fetch order." };
 }
 
-// Admin Actions
 export async function signIn(formData: FormData) {
-  const supabase = createClient();
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    return redirect(`/admin?message=${error.message}`);
-  }
-
-  revalidatePath('/admin/dashboard');
-  return redirect('/admin/dashboard');
+  console.log("signIn called, but no auth is configured.");
+  return redirect(`/admin?message=Admin dashboard has been removed.`);
 }
 
 export async function signOut() {
-  const supabase = createClient();
-  await supabase.auth.signOut();
-  return redirect('/admin');
+  console.log("signOut called, but no auth is configured.");
+  return redirect('/');
 }
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from('orders')
-      .update({ order_status: status })
-      .eq('id', orderId);
-
-    if (error) {
-      console.error("Failed to update order status", error);
-    }
-    revalidatePath('/admin/dashboard');
-    return { error: error?.message };
+    console.log(`updateOrderStatus called for order ${orderId} to ${status}, but no database is connected.`);
+    return { error: "Database not connected." };
 }
 
 export async function updatePaymentStatus(orderId: string, status: PaymentStatus) {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from('orders')
-      .update({ payment_status: status })
-      .eq('id', orderId);
-    
-    if (error) {
-        console.error("Failed to update payment status", error);
-    }
-    revalidatePath('/admin/dashboard');
-    return { error: error?.message };
+    console.log(`updatePaymentStatus called for order ${orderId} to ${status}, but no database is connected.`);
+    return { error: "Database not connected." };
 }
 
 export async function deleteOrder(orderId: string) {
-    const supabase = createClient();
-    const { error } = await supabase
-        .from('orders')
-        .delete()
-        .eq('id', orderId);
-    
-    if (error) {
-        console.error("Failed to delete order", error);
-    }
-    revalidatePath('/admin/dashboard');
-    return { error: error?.message };
+    console.log(`deleteOrder called for order ${orderId}, but no database is connected.`);
+    return { error: "Database not connected." };
 }
