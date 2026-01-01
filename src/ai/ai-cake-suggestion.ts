@@ -26,11 +26,11 @@ const SuggestCakeOutputSchema = z.object({
 export type SuggestCakeOutput = z.infer<typeof SuggestCakeOutputSchema>;
 
 export async function suggestCake(input: SuggestCakeInput): Promise<SuggestCakeOutput> {
-  const {output} = await suggestCakeFlow(input);
-  if (!output) {
+  const result = await suggestCakeFlow(input);
+  if (!result) {
     throw new Error('AI failed to generate a suggestion.');
   }
-  return output;
+  return result;
 }
 
 const suggestCakePrompt = ai.definePrompt({
